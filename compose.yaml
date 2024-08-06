@@ -16,6 +16,7 @@ services:
       - 3000:3000
     build:
       context: .
+      target: prod
     restart: always
 
   backend:
