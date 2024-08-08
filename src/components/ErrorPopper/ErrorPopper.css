@@ -1,0 +1,34 @@
+.ErrorPopperArrow,
+.ErrorPopperArrow::before {
+  position: absolute;
+  width: 12px;
+  height: 12px;
+  background: inherit;
+  border-radius: 2px;
+}
+
+.ErrorPopperArrow {
+  visibility: hidden;
+}
+
+.ErrorPopperArrow::before {
+  visibility: visible;
+  content: '';
+  transform: rotate(45deg);
+}
+
+.ErrorPopper[data-popper-placement^='top']>.ErrorPopperArrow {
+  bottom: -4px;
+}
+
+.ErrorPopper[data-popper-placement^='bottom']>.ErrorPopperArrow {
+  top: -4px;
+}
+
+.ErrorPopper[data-popper-placement^='left']>.ErrorPopperArrow {
+  right: -4px;
+}
+
+.ErrorPopper[data-popper-placement^='right']>.ErrorPopperArrow {
+  left: -4px;
+}
