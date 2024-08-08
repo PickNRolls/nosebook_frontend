@@ -1,5 +1,5 @@
 export default function Page() {
   return (
-    <main>Hello world!</main>
+    <main className="subpixel-antialiased">Hello world!</main>
   );
 }

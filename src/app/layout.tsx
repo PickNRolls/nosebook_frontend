@@ -23,7 +23,7 @@ export default function RootLayout({
         <div className="flex justify-center">
           <div className="container flex">
             <Sidebar />
-            <div className="basis-5/6">
+            <div className="basis-5/6 pt-4">
               {children}
             </div>
           </div>
