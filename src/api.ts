@@ -5,7 +5,7 @@ export const api = (endpoint: string, init?: RequestInit) => {
     ...init,
     headers: {
       ...init?.headers,
-      Cookie: cookies().toString()
+      'X-Auth-Session-Id': cookies().get('nosebook_session')?.value ?? '',
     },
   })
 };
