@@ -1,4 +1,5 @@
 import { Sidebar } from "@/components/Sidebar";
+import { getWhoami } from "@/getWhoami";
 
 
 export default function Layout({
@@ -6,6 +7,8 @@ export default function Layout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  getWhoami();
+
   return (
     <>
       <div className="flex justify-center">

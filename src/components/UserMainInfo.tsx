@@ -1,6 +1,7 @@
 import { User } from "@/typings/User";
 import AvatarImage from "@/images/avatar.jpg";
 import Image from 'next/image';
+import { getWhoami } from "@/getWhoami";
 
 export type UserMainInfoProps = {
   user: User;
@@ -8,6 +9,8 @@ export type UserMainInfoProps = {
 
 export const UserMainInfo = async (props: UserMainInfoProps) => {
   const user = props.user;
+
+  const me = await getWhoami();
 
   return <div className="h-80 rounded-lg bg-slate-200 relative border-slate-200 border">
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
@@ -29,9 +32,11 @@ export const UserMainInfo = async (props: UserMainInfoProps) => {
         </div>
 
         <div className="basis-1/3 ml-auto flex">
-          <button className="rounded-lg h-8 w-28 bg-blue-600 text-white font-medium text-sm ml-auto">
-            Сообщение
-          </button>
+          {me.id !== user.id && (
+            <button className="rounded-lg h-8 w-28 bg-blue-600 text-white font-medium text-sm ml-auto">
+              Сообщение
+            </button>
+          )}
         </div>
       </div>
     </div>
