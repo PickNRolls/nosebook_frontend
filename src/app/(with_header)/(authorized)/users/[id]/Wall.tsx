@@ -43,7 +43,7 @@ export const Wall: React.FC<WallProps> = (props) => {
         setPosts((posts) => [...posts, ...res.data])
       });
     }, {
-      threshold: 0.5
+      threshold: 0.1
     });
 
     observer.observe(observableRef.current!);
@@ -59,7 +59,7 @@ export const Wall: React.FC<WallProps> = (props) => {
         onSubmit={handleSubmit}
       />
       <PostWall posts={posts} />
-      <div ref={observableRef} />
+      <div className="relative -top-[500px]" ref={observableRef} />
     </>
   )
 }
