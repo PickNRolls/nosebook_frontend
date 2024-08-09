@@ -4,34 +4,51 @@ import { ProfileBlock } from "@/components/ProfileBlock";
 import { Avatar } from "../Avatar";
 import { User } from "@/typings/User";
 import { Button } from "../Button";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import cn from 'classnames';
 
 export type PostFormProps = {
   me: User;
-  onSubmit: (value: string) => void;
+  onSubmit: (value: string) => Promise<boolean>;
 };
 
 export const PostForm: React.FC<PostFormProps> = (props) => {
   const { me, onSubmit } = props;
 
+  const ref = useRef<HTMLTextAreaElement>(null);
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
 
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    if (event.target.value) {
-      event.target.style.height = '1px';
-      event.target.style.height = event.target.scrollHeight + 'px';
-    } else {
-      event.target.style.height = '';
+  const resize = (currentValue: string) => {
+    if (!ref.current) {
+      return;
     }
 
+    if (currentValue) {
+      ref.current.style.height = '1px';
+      ref.current.style.height = ref.current.scrollHeight + 'px';
+    } else {
+      ref.current.style.height = '';
+    }
+  };
+
+  const submit = async () => {
+    const ok = await onSubmit(value);
+    if (ok) {
+      setValue('');
+      resize('');
+      ref.current?.blur();
+    }
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    resize(event.target.value);
     setValue(event.target.value);
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (event.ctrlKey && event.key === 'Enter') {
-      onSubmit(value);
+      submit();
     }
   };
 
@@ -46,6 +63,8 @@ export const PostForm: React.FC<PostFormProps> = (props) => {
             'focus:pt-4 focus:pb-4 focus:min-h-20',
             Boolean(value) && 'pt-4 pb-4 min-h-20'
           )}
+          ref={ref}
+          value={value}
           onChange={handleChange}
           onKeyDown={handleKeyDown}
           onFocus={() => setFocused(true)}
@@ -59,7 +78,7 @@ export const PostForm: React.FC<PostFormProps> = (props) => {
             width="auto"
             height="md"
             className="ml-auto"
-            onClick={() => onSubmit(value)}
+            onClick={submit}
           >
             Опубликовать
           </Button>
