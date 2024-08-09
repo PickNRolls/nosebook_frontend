@@ -3,6 +3,7 @@
 import { Post as PostType } from "@/typings/posts/Post";
 import { LikeButton } from "./LikeButton";
 import { useState } from "react";
+import { ProfileBlock } from "../ProfileBlock";
 
 
 export type PostProps = {
@@ -14,7 +15,7 @@ export const Post = (props: PostProps) => {
   const [newerPost, setNewerPost] = useState<PostType>();
   const post = newerPost ? newerPost : props.post;
 
-  return <div className="bg-white rounded-lg border border-slate-200 flex flex-col">
+  return <ProfileBlock className="flex flex-col">
     <div className="px-4 pt-5">
       <div>
         {post.author.firstName} {post.author.lastName}
@@ -28,7 +29,7 @@ export const Post = (props: PostProps) => {
       </div>
     </div>
 
-    <div className="h-96 px-4">
+    <div className="min-h-10 px-4">
       {post.message}
     </div>
 
@@ -45,6 +46,6 @@ export const Post = (props: PostProps) => {
         Comment
       </button>
     </div>
-  </div >;
+  </ProfileBlock>;
 };
 

@@ -1,17 +1,20 @@
 import { User } from "@/typings/User";
 import { getWhoami } from "@/getWhoami";
-import { Avatar } from "./Avatar";
+import { Avatar } from "@/components/Avatar";
+import { Button } from "@/components/Button";
+import cn from 'classnames';
 
 export type UserMainInfoProps = {
+  className?: string;
   user: User;
 }
 
 export const UserMainInfo = async (props: UserMainInfoProps) => {
   const user = props.user;
 
-  const me = await getWhoami();
+  const res = await getWhoami();
 
-  return <div className="h-80 rounded-lg bg-slate-200 relative border-slate-200 border">
+  return <div className={cn("h-80 rounded-lg bg-slate-200 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
       <Avatar className="absolute left-2 -top-16" user={user} />
 
@@ -27,10 +30,10 @@ export const UserMainInfo = async (props: UserMainInfoProps) => {
         </div>
 
         <div className="basis-1/3 ml-auto flex">
-          {!('error' in me) && me.id !== user.id && (
-            <button className="rounded-lg h-8 w-28 bg-blue-600 text-white font-medium text-sm ml-auto">
+          {res?.data && res.data.id !== user.id && (
+            <Button width="auto" height="md" className="ml-auto">
               Сообщение
-            </button>
+            </Button>
           )}
         </div>
       </div>
