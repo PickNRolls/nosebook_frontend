@@ -33,7 +33,8 @@ export default async function Page({ params }: {
             onLikeClick={async (post) => {
               'use server';
 
-              return like(post.id);
+              const res = await like(post.id);
+              return res.data!;
             }} />
         ))}
       </div>
