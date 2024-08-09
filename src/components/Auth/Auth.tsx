@@ -9,22 +9,24 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from "./schemas/register_schema";
 import { loginSchema } from "./schemas/login_schema";
 import { Register } from "@/typings/Register";
+import { Login } from "@/typings/Login";
 
 export type AuthProps = {
   onRegister: (data: Register) => void;
+  onLogin: (data: Login) => void;
 };
 
 export const Auth: React.FC<AuthProps> = (props) => {
   const [processType, setProcessType] = useState<'register' | 'login'>('login');
-  const loginForm = useForm({
+  const loginForm = useForm<Login>({
     resolver: zodResolver(loginSchema)
   });
   const registerForm = useForm<Register>({
     resolver: zodResolver(registerSchema)
   });
 
-  const handleLoginSubmit = (data) => {
-    console.log(data);
+  const handleLoginSubmit = (data: Login) => {
+    props.onLogin(data);
   };
 
   const handleRegisterSubmit = (data: Register) => {
@@ -39,16 +41,14 @@ export const Auth: React.FC<AuthProps> = (props) => {
         >
           <span className="font-medium text-xl mb-3">Вход Nosebook</span>
           <Controller
-            name="nickname"
+            name="nick"
             control={loginForm.control}
-            rules={{ required: true }}
             render={(props) => <Textinput placeholder="Логин" {...props} />}
           />
           <Controller
             name="password"
             control={loginForm.control}
-            rules={{ required: true }}
-            render={(props) => <Textinput placeholder="Пароль" {...props} />}
+            render={(props) => <Textinput placeholder="Пароль" {...props} type="password" />}
           />
           <Button onClick={loginForm.handleSubmit(handleLoginSubmit)}>
             Войти

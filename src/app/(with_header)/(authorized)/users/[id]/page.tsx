@@ -3,6 +3,7 @@ import { like } from "@/components/like";
 import { Post } from "@/components/Post";
 import { UserMainInfo } from "@/components/UserMainInfo";
 import { PostQueryResult } from "@/typings/posts/PostQueryResult";
+import { User } from "@/typings/User";
 
 export default async function Page({ params }: {
   params: {
@@ -13,19 +14,19 @@ export default async function Page({ params }: {
     user,
     postsResult
   ] = await Promise.all([
-    api(`/users/${params.id}`, {
+    api<User>(`/users/${params.id}`, {
       method: 'GET'
-    }).then(res => res.json()),
-    api(`/posts?ownerId=${params.id}`, {
+    }),
+    api<PostQueryResult>(`/posts?ownerId=${params.id}`, {
       method: 'GET'
-    }).then(res => res.json() as Promise<PostQueryResult>)
+    })
   ]);
 
   return (
     <div>
-      <UserMainInfo user={user} />
+      <UserMainInfo user={user.data!} />
       <div>
-        {postsResult.data.map((post) => (
+        {postsResult.data?.data.map((post) => (
           <Post
             key={post.id}
             post={post}

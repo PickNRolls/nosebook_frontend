@@ -1,7 +1,6 @@
 import { Sidebar } from "@/components/Sidebar";
 import { getWhoami } from "@/getWhoami";
 
-
 export default function Layout({
   children,
 }: Readonly<{

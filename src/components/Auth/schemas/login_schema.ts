@@ -3,6 +3,6 @@ import { string } from './string';
 import { password } from './password';
 
 export const loginSchema = zod.object({
-  nickname: string,
+  nick: string,
   password,
 });

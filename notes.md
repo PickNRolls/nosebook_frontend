@@ -1,1 +1,2 @@
 - container width
+- обработка ошибок из api
