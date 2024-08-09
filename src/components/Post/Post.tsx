@@ -4,7 +4,8 @@ import { Post as PostType } from "@/typings/posts/Post";
 import { LikeButton } from "./LikeButton";
 import { useState } from "react";
 import { ProfileBlock } from "../ProfileBlock";
-
+import { CommentButton } from "./CommentButton";
+import { RepostButton } from "./RepostButton";
 
 export type PostProps = {
   post: PostType;
@@ -42,9 +43,8 @@ export const Post = (props: PostProps) => {
           setNewerPost(newPost);
         }}
       />
-      <button className="bg-slate-100 rounded-lg text-slate-500 h-8 px-3">
-        Comment
-      </button>
+      <CommentButton />
+      <RepostButton />
     </div>
   </ProfileBlock>;
 };
