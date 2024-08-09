@@ -14,7 +14,7 @@ export const UserMainInfo = async (props: UserMainInfoProps) => {
 
   const res = await getWhoami();
 
-  return <div className={cn("h-80 rounded-lg bg-slate-200 relative border-slate-200 border", props.className)}>
+  return <div className={cn("h-80 rounded-lg bg-slate-100 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
       <Avatar className="absolute left-2 -top-16" user={user} />
 
