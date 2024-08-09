@@ -29,7 +29,7 @@ export default async function Page({ params }: {
         <div className="flex flex-col gap-4 basis-2/3">
           <Wall
             me={me!.data!}
-            initialPosts={postsResult.data!.data}
+            initialPostsQueryResult={postsResult.data!}
             onPostPublish={async (message) => {
               'use server';
 
@@ -41,6 +41,14 @@ export default async function Page({ params }: {
                 })
               });
 
+              return res.data!;
+            }}
+            onFetch={async (cursor: string) => {
+              'use server';
+
+              const res = await api<PostQueryResult>(`/posts?ownerId=${params.id}&cursor=${encodeURIComponent(cursor)}`, {
+                method: 'GET'
+              });
               return res.data!;
             }}
           />
