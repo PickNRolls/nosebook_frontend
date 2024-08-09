@@ -28,7 +28,6 @@ export default function Page() {
           })
 
           userId = user.id;
-          redirect(`/users/${user.id}`);
         }).finally(() => {
           if (userId) {
             redirect(`/users/${userId}`)
