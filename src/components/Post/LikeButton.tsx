@@ -1,4 +1,3 @@
-import cn from 'classnames';
 import { Button } from '@/components/Button';
 
 export type LikeButtonProps = {
@@ -13,7 +12,7 @@ export const LikeButton: React.FC<LikeButtonProps> = (props) => {
   return (
     <Button
       view="default"
-      className={likedByUser ? 'bg-red-100 text-red-500 hover:text-red-500 hover:bg-red-100 active:bg-red-100' : ''}
+      className={likedByUser ? '!bg-red-100 !text-red-500 !hover:text-red-500 !hover:bg-red-100 !active:bg-red-100' : ''}
       width="auto"
       rounded="full"
       height="md"
