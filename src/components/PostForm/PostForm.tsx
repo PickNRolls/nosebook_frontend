@@ -57,9 +57,10 @@ export const PostForm: React.FC<PostFormProps> = (props) => {
       <div className="flex">
         <Avatar size="xs" user={me} />
         <textarea
+          placeholder="Что у вас нового?"
           className={cn(
-            'w-full resize-none outline-none text-[13px] rounded-r-lg overflow-hidden max-h-none',
-            'pl-2 pr-10 -mt-2 -mb-2 -mr-2',
+            'w-full resize-none outline-none text-[13px] rounded-r-lg overflow-hidden max-h-none leading-[18px]',
+            'pl-2 pr-10 pt-4 -mt-2 -mb-2 -mr-2',
             'focus:pt-4 focus:pb-4 focus:min-h-20',
             Boolean(value) && 'pt-4 pb-4 min-h-20'
           )}
