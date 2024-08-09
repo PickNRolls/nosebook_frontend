@@ -1,5 +1,6 @@
 import { api } from "@/api";
 import { Auth } from "@/components/Auth";
+import { linkUserPage } from "@/components/linkUserPage";
 import { SESSION_COOKIE_KEY } from "@/const/auth";
 import { AuthResult } from "@/typings/AuthResult";
 import { cookies } from "next/headers";
@@ -30,7 +31,7 @@ export default function Page() {
           userId = user.id;
         }).finally(() => {
           if (userId) {
-            redirect(`/users/${userId}`)
+            redirect(linkUserPage(userId))
           }
         });
       }}
@@ -57,7 +58,7 @@ export default function Page() {
           userId = user.id;
         }).finally(() => {
           if (userId) {
-            redirect(`/users/${userId}`)
+            redirect(linkUserPage(userId))
           }
         })
       }}
