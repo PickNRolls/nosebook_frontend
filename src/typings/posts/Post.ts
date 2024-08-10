@@ -1,5 +1,4 @@
-import { mockUuid } from "@/mockUuid";
-import { mockUser, User } from "../User";
+import { User } from "../User";
 
 export type Post = {
   id: string;
@@ -8,17 +7,8 @@ export type Post = {
   message: string;
   likesCount: number;
   likedByUser: boolean;
+  canBeRemovedByUser: boolean;
   randomFiveLikers: User[];
   createdAt: string;
 };
 
-// export function mockPost(): Post {
-//   return {
-//     id: mockUuid(),
-//     author: mockUser(),
-//     message: 'Mocked post',
-//     likedBy: [mockUser()],
-//     comments: [],
-//     createdAt: new Date().toISOString()
-//   };
-// }

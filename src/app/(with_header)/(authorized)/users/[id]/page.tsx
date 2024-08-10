@@ -31,6 +31,16 @@ export default async function Page({ params }: {
           <Wall
             me={me!.data!}
             initialPostsQueryResult={postsResult?.data}
+            onPostRemove={async (post) => {
+              'use server';
+
+              await actionApi('/posts/remove', {
+                method: 'POST',
+                body: JSON.stringify({
+                  id: post.id,
+                }),
+              });
+            }}
             onPostPublish={async (message) => {
               'use server';
 

@@ -5,17 +5,18 @@ import { PostWall } from "@/components/PostWall";
 import { Post } from "@/typings/posts/Post";
 import { PostQueryResult } from "@/typings/posts/PostQueryResult";
 import { User } from "@/typings/User";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 export type WallProps = {
   me: User;
   initialPostsQueryResult: PostQueryResult | undefined;
   onPostPublish: (message: string) => Promise<Post | undefined>;
+  onPostRemove: (post: Post) => Promise<void>;
   onFetch: (cursor: string) => Promise<PostQueryResult | undefined>;
 };
 
 export const Wall: React.FC<WallProps> = (props) => {
-  const { me, initialPostsQueryResult, onPostPublish, onFetch } = props;
+  const { me, initialPostsQueryResult, onPostPublish, onPostRemove, onFetch } = props;
 
   const currentQuery = useRef(initialPostsQueryResult);
   const [posts, setPosts] = useState(initialPostsQueryResult?.data || []);
@@ -28,6 +29,11 @@ export const Wall: React.FC<WallProps> = (props) => {
       return true;
     }
     return false;
+  };
+
+  const handlePostRemove = async (post: Post) => {
+    await onPostRemove(post);
+    setPosts((posts) => posts.filter(p => p.id !== post.id))
   };
 
   useEffect(() => {
@@ -63,7 +69,7 @@ export const Wall: React.FC<WallProps> = (props) => {
         me={me}
         onSubmit={handleSubmit}
       />
-      <PostWall posts={posts} />
+      <PostWall posts={posts} onPostRemove={handlePostRemove} />
       <div className="relative -top-[500px]" ref={observableRef} />
     </>
   )

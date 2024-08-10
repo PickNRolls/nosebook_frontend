@@ -2,11 +2,11 @@ import { Post } from "@/components/Post";
 import { like } from "@/components/like";
 import { Post as PostType } from "@/typings/posts/Post";
 import cn from 'classnames';
-import { redirect } from "next/navigation";
 
 export type PostWallProps = {
   className?: string;
   posts: PostType[];
+  onPostRemove: (post: PostType) => void;
 }
 
 export const PostWall = (props: PostWallProps) => {
@@ -19,7 +19,9 @@ export const PostWall = (props: PostWallProps) => {
           onLikeClick={async (post) => {
             const res = await like(post.id);
             return res?.data;
-          }} />
+          }}
+          onRemoveClick={props.onPostRemove}
+        />
       ))}
     </div>
   );

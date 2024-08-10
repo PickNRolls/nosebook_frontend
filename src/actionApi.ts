@@ -17,11 +17,11 @@ export const actionApi = <T>(endpoint: string, init?: RequestInit & {
 
   return api<T>(endpoint, init).catch((res: ApiResponse<T>) => {
     const errors = res!.errors!;
-    if (errors.length && errors.find(err => err.type === 'NotAuthorized')) {
+    if (errors.length === 1 && errors[0].type === 'NotAuthorized') {
       cookies().delete(SESSION_COOKIE_KEY);
       redirect('/login');
     }
 
-    return res;
+    throw res;
   });
 };
