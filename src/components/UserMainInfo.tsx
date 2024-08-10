@@ -6,13 +6,16 @@ import cn from 'classnames';
 
 export type UserMainInfoProps = {
   className?: string;
-  user: User;
+  user: User | undefined;
 }
 
 export const UserMainInfo = async (props: UserMainInfoProps) => {
   const user = props.user;
 
   const res = await getWhoami();
+  if (!user) {
+    return null;
+  }
 
   return <div className={cn("h-80 rounded-lg bg-slate-100 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">

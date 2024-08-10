@@ -13,7 +13,7 @@ import { Avatar } from "@/components/Avatar";
 
 export type PostProps = {
   post: PostType;
-  onLikeClick: (post: PostType) => Promise<PostType>;
+  onLikeClick: (post: PostType) => Promise<PostType | undefined>;
 }
 
 export const Post = (props: PostProps) => {
@@ -43,7 +43,9 @@ export const Post = (props: PostProps) => {
         likesCount={post.likesCount}
         onClick={async () => {
           const newPost = await props.onLikeClick(post);
-          setNewerPost(newPost);
+          if (newPost) {
+            setNewerPost(newPost);
+          }
         }}
       />
       <CommentButton />

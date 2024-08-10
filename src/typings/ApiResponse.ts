@@ -6,5 +6,5 @@ export type ApiResponseError = {
 export type ApiResponse<T = unknown> = {
   errors?: ApiResponseError[];
   data?: T;
-};
+} | undefined;
 

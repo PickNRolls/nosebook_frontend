@@ -1,4 +1,4 @@
-import { api } from "@/api";
+import { actionApi } from "@/actionApi";
 import { Auth } from "@/components/Auth";
 import { linkUserPage } from "@/components/linkUserPage";
 import { SESSION_COOKIE_KEY } from "@/const/auth";
@@ -14,11 +14,12 @@ export default function Page() {
 
         let userId: null | string = null;
 
-        return api<AuthResult>('/login', {
+        return actionApi<AuthResult>('/login', {
           method: 'POST',
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          checkSessionCookie: false,
         }).then(res => {
-          const { user, session } = res.data!;
+          const { user, session } = res!.data!;
 
           const now = new Date();
           cookies().set(SESSION_COOKIE_KEY, session.sessionId, {
@@ -41,11 +42,12 @@ export default function Page() {
 
         let userId: null | string = null;
 
-        return api<AuthResult>('/register', {
+        return actionApi<AuthResult>('/register', {
           method: 'POST',
-          body: JSON.stringify(data)
+          body: JSON.stringify(data),
+          checkSessionCookie: false,
         }).then(res => {
-          const { user, session } = res.data!;
+          const { user, session } = res!.data!;
 
           const now = new Date();
           cookies().set(SESSION_COOKIE_KEY, session.sessionId, {

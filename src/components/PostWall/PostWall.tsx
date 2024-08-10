@@ -2,6 +2,7 @@ import { Post } from "@/components/Post";
 import { like } from "@/components/like";
 import { Post as PostType } from "@/typings/posts/Post";
 import cn from 'classnames';
+import { redirect } from "next/navigation";
 
 export type PostWallProps = {
   className?: string;
@@ -17,7 +18,7 @@ export const PostWall = (props: PostWallProps) => {
           post={post}
           onLikeClick={async (post) => {
             const res = await like(post.id);
-            return res.data!;
+            return res?.data;
           }} />
       ))}
     </div>

@@ -1,4 +1,3 @@
-import { api } from "@/api";
 import { ProfileBlock } from "@/components/ProfileBlock";
 import { UserMainInfo } from "@/components/UserMainInfo";
 import { getWhoami } from "@/getWhoami";
@@ -6,6 +5,8 @@ import { Post } from "@/typings/posts/Post";
 import { User } from "@/typings/User";
 import { Wall } from "./Wall";
 import { PostQueryResult } from "@/typings/posts/PostQueryResult";
+import { serverRenderApi } from "@/serverRenderApi";
+import { actionApi } from "@/actionApi";
 
 export default async function Page({ params }: {
   params: {
@@ -14,26 +15,26 @@ export default async function Page({ params }: {
 }) {
   const [me, user, postsResult] = await Promise.all([
     getWhoami(),
-    api<User>(`/users/${params.id}`, {
+    serverRenderApi<User>(`/users/${params.id}`, {
       method: 'GET'
     }),
-    api<PostQueryResult>(`/posts?ownerId=${params.id}`, {
+    serverRenderApi<PostQueryResult>(`/posts?ownerId=${params.id}`, {
       method: 'GET'
     })
-  ])
+  ]);
 
   return (
     <div>
-      <UserMainInfo user={user.data!} className="mb-4" />
+      <UserMainInfo user={user?.data} className="mb-4" />
       <div className="flex gap-4">
         <div className="flex flex-col gap-4 basis-2/3">
           <Wall
             me={me!.data!}
-            initialPostsQueryResult={postsResult.data!}
+            initialPostsQueryResult={postsResult?.data}
             onPostPublish={async (message) => {
               'use server';
 
-              const res = await api<Post>('/posts/publish', {
+              const res = await actionApi<Post>('/posts/publish', {
                 method: 'POST',
                 body: JSON.stringify({
                   message,
@@ -41,15 +42,15 @@ export default async function Page({ params }: {
                 })
               });
 
-              return res.data!;
+              return res?.data;
             }}
             onFetch={async (cursor: string) => {
               'use server';
 
-              const res = await api<PostQueryResult>(`/posts?ownerId=${params.id}&cursor=${encodeURIComponent(cursor)}`, {
+              const res = await actionApi<PostQueryResult>(`/posts?ownerId=${params.id}&cursor=${encodeURIComponent(cursor)}`, {
                 method: 'GET'
               });
-              return res.data!;
+              return res?.data;
             }}
           />
         </div>
