@@ -4,16 +4,18 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { Divider } from "../Divider";
 import { Textinput } from "../Textinput";
-import { Controller, useForm } from "react-hook-form";
+import { Controller, useForm, UseFormReturn } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from "./schemas/register_schema";
 import { loginSchema } from "./schemas/login_schema";
 import { Register } from "@/typings/Register";
 import { Login } from "@/typings/Login";
+import { ApiResponse, ApiResponseError } from "@/typings/ApiResponse";
+import { decorateAction } from "../decorateAction";
 
 export type AuthProps = {
-  onRegister: (data: Register) => void;
-  onLogin: (data: Login) => void;
+  onRegister: (data: Register) => Promise<ApiResponse>;
+  onLogin: (data: Login) => Promise<ApiResponse<number>>;
 };
 
 export const Auth: React.FC<AuthProps> = (props) => {
@@ -25,12 +27,48 @@ export const Auth: React.FC<AuthProps> = (props) => {
     resolver: zodResolver(registerSchema)
   });
 
-  const handleLoginSubmit = (data: Login) => {
-    props.onLogin(data);
+  const handleLoginSubmit = async (data: Login) => {
+    const res = await decorateAction(props.onLogin, {
+      handleErrors: false,
+    })(data);
+
+    res.handleError('NickError', (err) => {
+      loginForm.setError('nick', {
+        message: err.message,
+      }, {
+        shouldFocus: true,
+      });
+    });
+
+    res.handleError('PasswordError', (err) => {
+      loginForm.setError('password', {
+        message: err.message,
+      }, {
+        shouldFocus: true,
+      });
+    });
   };
 
-  const handleRegisterSubmit = (data: Register) => {
-    props.onRegister(data);
+  const handleRegisterSubmit = async (data: Register) => {
+    const res = await decorateAction(props.onRegister, {
+      handleErrors: false,
+    })(data);
+
+    res.handleError('NickError', (err) => {
+      registerForm.setError('nick', {
+        message: err.message,
+      }, {
+        shouldFocus: true,
+      });
+    });
+
+    res.handleError('PasswordError', (err) => {
+      registerForm.setError('password', {
+        message: err.message,
+      }, {
+        shouldFocus: true,
+      });
+    });
   }
 
   return (

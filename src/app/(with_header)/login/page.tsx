@@ -30,7 +30,8 @@ export default function Page() {
           })
 
           userId = user.id;
-        }).finally(() => {
+          return res;
+        }).catch(res => res).finally(() => {
           if (userId) {
             redirect(linkUserPage(userId))
           }
@@ -58,7 +59,8 @@ export default function Page() {
           })
 
           userId = user.id;
-        }).finally(() => {
+          return res;
+        }).catch(res => res).finally(() => {
           if (userId) {
             redirect(linkUserPage(userId))
           }
