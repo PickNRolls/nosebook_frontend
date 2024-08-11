@@ -2,6 +2,7 @@
 
 import { PostForm } from "@/components/PostForm";
 import { PostWall } from "@/components/PostWall";
+import { Comment } from "@/typings/Comment";
 import { Post } from "@/typings/posts/Post";
 import { PostQueryResult } from "@/typings/posts/PostQueryResult";
 import { User } from "@/typings/User";
@@ -12,11 +13,12 @@ export type WallProps = {
   initialPostsQueryResult: PostQueryResult | undefined;
   onPostPublish: (message: string) => Promise<Post | undefined>;
   onPostRemove: (post: Post) => Promise<void>;
+  onCommentSubmit: (comment: string) => Promise<Comment | undefined>;
   onFetch: (cursor: string) => Promise<PostQueryResult | undefined>;
 };
 
 export const Wall: React.FC<WallProps> = (props) => {
-  const { me, initialPostsQueryResult, onPostPublish, onPostRemove, onFetch } = props;
+  const { me, initialPostsQueryResult, onPostPublish, onPostRemove, onCommentSubmit, onFetch } = props;
 
   const currentQuery = useRef(initialPostsQueryResult);
   const [posts, setPosts] = useState(initialPostsQueryResult?.data || []);
@@ -24,11 +26,33 @@ export const Wall: React.FC<WallProps> = (props) => {
 
   const handleSubmit = async (message: string) => {
     const publishedPost = await onPostPublish(message);
+
     if (publishedPost) {
-      setPosts((posts) => [publishedPost, ...posts]);
-      return true;
+      setPosts(posts => [publishedPost, ...posts]);
     }
-    return false;
+
+    return Boolean(publishedPost);
+  };
+
+  const handleCommentSubmit = async (post: Post, comment: string) => {
+    const publishedComment = await onCommentSubmit(comment);
+
+    // if (publishedComment) {
+    //   setPosts(posts => {
+    //     return posts.map(p => {
+    //       if (p.id === post.id) {
+    //         return {
+    //           ...p,
+    //           comments: [...p.comments, publishedComment]
+    //         };
+    //       }
+    //
+    //       return p;
+    //     });
+    //   });
+    // }
+
+    return Boolean(publishedComment);
   };
 
   const handlePostRemove = async (post: Post) => {
@@ -69,7 +93,12 @@ export const Wall: React.FC<WallProps> = (props) => {
         me={me}
         onSubmit={handleSubmit}
       />
-      <PostWall posts={posts} onPostRemove={handlePostRemove} />
+      <PostWall
+        me={me}
+        posts={posts}
+        onPostRemove={handlePostRemove}
+        onCommentSubmit={handleCommentSubmit}
+      />
       <div className="relative -top-[500px]" ref={observableRef} />
     </>
   )

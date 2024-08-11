@@ -31,6 +31,11 @@ export default async function Page({ params }: {
           <Wall
             me={me!.data!}
             initialPostsQueryResult={postsResult?.data}
+            onCommentSubmit={async (comment) => {
+              'use server';
+
+              return {};
+            }}
             onPostRemove={async (post) => {
               'use server';
 

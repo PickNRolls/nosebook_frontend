@@ -2,7 +2,7 @@
 
 import { Post as PostType } from "@/typings/posts/Post";
 import { LikeButton } from "./LikeButton";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ProfileBlock } from "../ProfileBlock";
 import { CommentButton } from "./CommentButton";
 import { RepostButton } from "./RepostButton";
@@ -10,25 +10,44 @@ import { Link } from "@/components/Link";
 import { linkUserPage } from "@/components/linkUserPage";
 import { RealtimeDate } from "@/components/RealtimeDate";
 import { Avatar } from "@/components/Avatar";
+import { User } from "@/typings/User";
+import { PostCommentInput } from "../PostCommentInput";
 
 export type PostProps = {
+  me: User;
   post: PostType;
   onLikeClick: (post: PostType) => Promise<PostType | undefined>;
   onRemoveClick: (post: PostType) => void;
+  onCommentSubmit: (post: PostType, comment: string) => void;
 }
 
 export const Post = (props: PostProps) => {
   const [newerPost, setNewerPost] = useState<PostType>();
+  const [commentSectionVisible, setCommentSectionVisible] = useState(false);
+  const [comment, setComment] = useState('');
+  const focusCommentAfterRenderRef = useRef(false);
+  const commentTextareaRef = useRef<HTMLTextAreaElement>();
+
   const post = newerPost ? newerPost : props.post;
+
+  const handleCommentClick = () => {
+    setCommentSectionVisible(true);
+    focusCommentAfterRenderRef.current = true;
+    commentTextareaRef.current?.focus();
+  };
+
+  const handleCommentSubmit = () => {
+    props.onCommentSubmit(post, comment);
+  };
 
   return <ProfileBlock className="flex flex-col">
     <div className="flex px-3 pt-3">
-      <Avatar className="-mt-[6px] -ml-[6px] mr-1" user={post.author} size="lg" outline={false} />
+      <Avatar className="-mt-[6px] -ml-[6px] mr-1" user={post.author} size="sm" outline={false} />
       <div className="flex flex-col">
-        <Link href={linkUserPage(post.author.id)} className="text-[13px] text-blue-600 font-medium">
+        <Link href={linkUserPage(post.author.id)} className="text-[13px] text-blue-600 font-medium leading-[16px] mt-[2px]">
           {post.author.firstName} {post.author.lastName}
         </Link>
-        <div className="text-[13px] text-gray-500">
+        <div className="text-[13px] text-gray-500 leading-[17px]">
           <RealtimeDate date={new Date(post.createdAt)} />
         </div>
       </div>
@@ -58,9 +77,26 @@ export const Post = (props: PostProps) => {
           }
         }}
       />
-      <CommentButton />
+      <CommentButton onClick={handleCommentClick} />
       <RepostButton />
     </div>
+
+    {commentSectionVisible && (
+      <PostCommentInput
+        me={props.me}
+        comment={comment}
+        onCommentChange={setComment}
+        onSubmit={handleCommentSubmit}
+        submitDisabled={!comment}
+        textareaRef={textarea => {
+          commentTextareaRef.current = textarea;
+          if (focusCommentAfterRenderRef.current) {
+            textarea.focus();
+            focusCommentAfterRenderRef.current = false;
+          }
+        }}
+      />
+    )}
   </ProfileBlock>;
 };
 

@@ -4,13 +4,13 @@ import { useState } from "react";
 import { Button } from "../Button";
 import { Divider } from "../Divider";
 import { Textinput } from "../Textinput";
-import { Controller, useForm, UseFormReturn } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { zodResolver } from '@hookform/resolvers/zod';
 import { registerSchema } from "./schemas/register_schema";
 import { loginSchema } from "./schemas/login_schema";
 import { Register } from "@/typings/Register";
 import { Login } from "@/typings/Login";
-import { ApiResponse, ApiResponseError } from "@/typings/ApiResponse";
+import { ApiResponse } from "@/typings/ApiResponse";
 import { decorateAction } from "../decorateAction";
 
 export type AuthProps = {
