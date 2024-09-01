@@ -15,7 +15,7 @@ export type CommentProps = {
   className?: string;
   borderBottom?: boolean;
   onLikeClick: (comment: Model) => Promise<boolean>;
-  onRemoveClick: (comment: Model) => Promise<boolean>;
+  onRemoveClick: (comment: Model) => Promise<void>;
 }
 
 export const Comment = (props: CommentProps) => {
@@ -39,7 +39,14 @@ export const Comment = (props: CommentProps) => {
         <featuser.components.Avatar user={comment.author} size="sm" className="size-[36px]" />
       </div>
       <div className={cn("flex flex-col w-full relative py-[7px]", props.borderBottom && "border-b border-slate-200")}>
-        <featuser.components.Link user={author} />
+        <div className="flex w-full items-center">
+          <featuser.components.Link user={author} />
+          {comment.permissions.remove && (
+            <span className="opacity-0 group-hover:opacity-100 text-slate-400 hover:text-slate-500 ml-auto" onClick={() => props.onRemoveClick(comment)}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="none" viewBox="0 0 16 16"><path fill="currentColor" d="M12.74 3.26a.9.9 0 0 1 0 1.28L9.27 8l3.47 3.46a.9.9 0 0 1 .08 1.18l-.08.1a.9.9 0 0 1-1.28 0L8 9.27l-3.46 3.47a.9.9 0 0 1-1.28-1.28L6.73 8 3.26 4.54a.9.9 0 0 1-.08-1.18l.08-.1a.9.9 0 0 1 1.28 0L8 6.73l3.46-3.47a.9.9 0 0 1 1.28 0Z"></path></svg>
+            </span>
+          )}
+        </div>
         <span className="text-[13px] leading-[18px]">{comment.message}</span>
         <span className="flex items-center text-[12.5px] text-gray-500 pt-[4px] leading-[14px]">
           <featrealtimedate.components.RealtimeDate date={new Date(comment.createdAt)} />

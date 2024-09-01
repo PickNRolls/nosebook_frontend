@@ -112,7 +112,14 @@ export default async function Page({ params }: {
             onCommentRemove={async (comment: featcomment.Model) => {
               'use server';
 
-              return true;
+              const res = await actionApi<null>(`/comments/remove`, {
+                method: 'POST',
+                body: JSON.stringify({
+                  id: comment.id,
+                })
+              });
+
+              return res.ok
             }}
           />
         </div>

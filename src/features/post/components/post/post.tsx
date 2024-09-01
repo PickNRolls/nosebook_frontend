@@ -43,6 +43,8 @@ export const Post = (props: PostProps) => {
   const [fetchedComments, setFetchedComments] = useState<featcomment.Model[]>([]);
   const [nextCursor, setNextCursor] = useState(post.recentComments.next);
 
+  const [removedCommentsMap, setRemovedCommentsMap] = useState<Record<string, boolean | undefined>>({});
+
   const handleCommentClick = () => {
     setCommentSectionVisible(true);
     focusCommentAfterRenderRef.current = true;
@@ -65,9 +67,24 @@ export const Post = (props: PostProps) => {
     }
   };
 
+  const handleCommentRemove = async (comment: featcomment.Model) => {
+    const ok = await props.onCommentRemove(comment);
+    if (!ok) {
+      return;
+    }
+
+    setRemovedCommentsMap(prev => {
+      return {
+        ...prev,
+        [comment.id]: true,
+      };
+    })
+  };
+
   const comments = post.recentComments.data
     .concat(fetchedComments)
-    .concat(props.publishedComments || []);
+    .concat(props.publishedComments || [])
+    .filter(c => !removedCommentsMap[c.id]);
 
   const showCommentForm = commentSectionVisible || comments.length > 0
 
@@ -133,7 +150,7 @@ export const Post = (props: PostProps) => {
               me={props.me}
               borderBottom={i < comments.length - 1}
               onLikeClick={props.onCommentLike}
-              onRemoveClick={props.onCommentRemove}
+              onRemoveClick={handleCommentRemove}
             />
           )
         })}
