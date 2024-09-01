@@ -2,7 +2,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 import * as featauth from '@/features/auth';
-import * as featuser from '@/features/user';
+import * as featuser from '@/features/user/server';
 
 import { actionApi } from "@/actionApi";
 import { Auth } from "@/components/auth";
@@ -25,7 +25,7 @@ export default function Page() {
           user = u;
 
           const now = new Date();
-          cookies().set(SESSION_COOKIE_KEY, session.sessionId, {
+          cookies().set(SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
             path: '/',
             domain: 'localhost',
             expires: now.setHours(now.getHours() + 48),
@@ -33,7 +33,7 @@ export default function Page() {
           })
         }).catch(res => res).finally(() => {
           if (user) {
-            redirect(featuser.profilePageHref(user))
+            redirect(featuser.profilePageHref(user.id))
           }
         });
       }}
@@ -51,7 +51,7 @@ export default function Page() {
           const { user: u, session } = res!.data!;
 
           const now = new Date();
-          cookies().set(SESSION_COOKIE_KEY, session.sessionId, {
+          cookies().set(SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
             path: '/',
             domain: 'localhost',
             expires: now.setHours(now.getHours() + 48),
@@ -62,7 +62,7 @@ export default function Page() {
           return res;
         }).catch(res => res).finally(() => {
           if (user) {
-            redirect(featuser.profilePageHref(user))
+            redirect(featuser.profilePageHref(user.id))
           }
         })
       }}

@@ -1,4 +1,4 @@
-import * as featuser from '@/features/user';
+import * as featuser from '@/features/user/server';
 import * as featcurrentuser from '@/features/current-user';
 import * as featpost from '@/features/post';
 import * as featcomment from '@/features/comment';

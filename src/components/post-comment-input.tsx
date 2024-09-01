@@ -1,7 +1,7 @@
 import { FC } from "react";
 import cn from 'classnames';
 
-import * as featuser from '@/features/user';
+import * as featuser from '@/features/user/client';
 import * as featcurrentuser from '@/features/current-user';
 
 import { Textarea } from "@/components/textarea";
@@ -11,14 +11,15 @@ export type PostCommentInputProps = {
   comment: string;
   onCommentChange: (comment: string) => void;
   onSubmit: () => void;
+  className?: string;
   submitDisabled?: boolean;
   textareaRef?: (textarea: HTMLTextAreaElement) => void;
 }
 
 export const PostCommentInput: FC<PostCommentInputProps> = (props) => {
   return (
-    <div className="flex px-5 py-[10px] border-t border-slate-200 -mx-2 -mb-2 mt-1">
-      <featuser.components.Avatar className="mr-2" user={props.me} outline={false} size="xxs" />
+    <div className={cn("flex px-5 py-[12px] -mx-2 -mb-2 mt-2", props.className)}>
+      <featuser.components.Avatar className="mr-2 size-[34px] min-w-[34px]" user={props.me} outline={false} />
       <Textarea
         className="border border-slate-200 rounded-md leading-[16px] h-[34px] min-h-[34px] py-[7px] pl-[13px] mr-5"
         value={props.comment}

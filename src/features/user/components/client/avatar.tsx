@@ -2,7 +2,7 @@ import Image from "next/image";
 import AvatarImage from '@/images/avatar.jpg';
 import cn from 'classnames';
 
-import { Model } from '../model';
+import { Model } from '../../model';
 
 export type AvatarProps = {
   className?: string;
@@ -22,19 +22,10 @@ export const Avatar = (props: AvatarProps) => {
       size === 'lg' && 'size-[52px]',
       size === 'sm' && 'size-12',
       size === 'xs' && 'size-9',
-      size === 'xxs' && 'size-[36px]'
+      size === 'xxs' && 'size-[36px]',
+      outline && 'border-white border-[4px]'
     )}>
-      <div className={cn(
-        'rounded-full',
-        outline && 'b border-4 border-white',
-        size === 'xxl' && 'size-36',
-        size === 'lg' && 'size-[48px]',
-        size === 'sm' && 'size-10',
-        size === 'xs' && 'size-9',
-        size === 'xxs' && 'size-[34px]'
-      )}>
-        <Image src={AvatarImage} alt="avatar" className="rounded-full" />
-      </div>
+      <Image src={AvatarImage} alt="avatar" className="rounded-full" />
     </div>
   );
 };

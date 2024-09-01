@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import * as featuser from '@/features/user';
+import * as featuser from '@/features/user/client';
 import * as featcurrentuser from '@/features/current-user';
 
 import { ProfileBlock } from "@/components/profile-block";

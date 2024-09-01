@@ -2,10 +2,10 @@ import cn from 'classnames';
 
 import * as featcurrentuser from '@/features/current-user';
 
-import { Avatar } from "./avatar";
+import { Avatar } from "../client/avatar";
 import { Button } from "@/components/button";
 
-import { Model } from '../model';
+import { Model } from '../../model';
 
 export type MainInfoProps = {
   className?: string;
@@ -22,7 +22,7 @@ export const MainInfo = async (props: MainInfoProps) => {
 
   return <div className={cn("h-80 rounded-lg bg-slate-100 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
-      <Avatar className="absolute left-2 -top-16" user={user} />
+      <Avatar className="absolute left-2 -top-16 size-[150px]" outline user={user} />
 
       <div className="basis-full ml-40 flex">
         <div className="h-full flex items-start flex-col">
