@@ -1,13 +1,22 @@
 'use server';
 
 import { actionApi } from "@/actionApi";
-import { ApiResponse } from "@/typings/ApiResponse";
-import { Post } from "@/typings/posts/Post";
 
-export const like = async (postId: string): Promise<ApiResponse<Post>> => {
-  return actionApi<Post>('/posts/like', {
+import * as dto from '@/dto';
+
+export const likePost = async (id: string): Promise<dto.ApiResponse> => {
+  return actionApi<null>('/like/post', {
     body: JSON.stringify({
-      id: postId,
+      id,
+    }),
+    method: 'POST'
+  });
+}
+
+export const likeComment = async (id: string): Promise<dto.ApiResponse> => {
+  return actionApi<null>('/like/comment', {
+    body: JSON.stringify({
+      id,
     }),
     method: 'POST'
   });

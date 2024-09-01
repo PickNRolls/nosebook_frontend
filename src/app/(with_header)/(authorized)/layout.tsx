@@ -1,12 +1,13 @@
-import { Sidebar } from "@/components/Sidebar";
-import { getWhoami } from "@/getWhoami";
+import * as featcurrentuser from '@/features/current-user';
+
+import { Sidebar } from "@/components/sidebar";
 
 export default function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  getWhoami();
+  featcurrentuser.api.get();
 
   return (
     <>

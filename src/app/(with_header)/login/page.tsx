@@ -1,10 +1,12 @@
-import { actionApi } from "@/actionApi";
-import { Auth } from "@/components/Auth";
-import { linkUserPage } from "@/components/linkUserPage";
-import { SESSION_COOKIE_KEY } from "@/const/auth";
-import { AuthResult } from "@/typings/AuthResult";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+import * as featauth from '@/features/auth';
+import * as featuser from '@/features/user';
+
+import { actionApi } from "@/actionApi";
+import { Auth } from "@/components/auth";
+import { SESSION_COOKIE_KEY } from "@/const/auth";
 
 export default function Page() {
   return (
@@ -12,14 +14,15 @@ export default function Page() {
       onLogin={async (data) => {
         'use server';
 
-        let userId: null | string = null;
+        let user: null | featuser.Model = null;
 
-        return actionApi<AuthResult>('/login', {
+        return actionApi<featauth.Model>('/login', {
           method: 'POST',
           body: JSON.stringify(data),
           checkSessionCookie: false,
         }).then(res => {
-          const { user, session } = res!.data!;
+          const { user: u, session } = res!.data!;
+          user = u;
 
           const now = new Date();
           cookies().set(SESSION_COOKIE_KEY, session.sessionId, {
@@ -28,12 +31,9 @@ export default function Page() {
             expires: now.setHours(now.getHours() + 48),
             httpOnly: true
           })
-
-          userId = user.id;
-          return res;
         }).catch(res => res).finally(() => {
-          if (userId) {
-            redirect(linkUserPage(userId))
+          if (user) {
+            redirect(featuser.profilePageHref(user))
           }
         });
       }}
@@ -41,14 +41,14 @@ export default function Page() {
       onRegister={async (data) => {
         'use server';
 
-        let userId: null | string = null;
+        let user: null | featuser.Model = null;
 
-        return actionApi<AuthResult>('/register', {
+        return actionApi<featauth.Model>('/register', {
           method: 'POST',
           body: JSON.stringify(data),
           checkSessionCookie: false,
         }).then(res => {
-          const { user, session } = res!.data!;
+          const { user: u, session } = res!.data!;
 
           const now = new Date();
           cookies().set(SESSION_COOKIE_KEY, session.sessionId, {
@@ -58,11 +58,11 @@ export default function Page() {
             httpOnly: true
           })
 
-          userId = user.id;
+          user = u;
           return res;
         }).catch(res => res).finally(() => {
-          if (userId) {
-            redirect(linkUserPage(userId))
+          if (user) {
+            redirect(featuser.profilePageHref(user))
           }
         })
       }}
