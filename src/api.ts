@@ -7,6 +7,7 @@ import { parseSessionCookie } from "./features/auth";
 
 export const api = async <T>(endpoint: string, init?: RequestInit): Promise<dto.ApiSuccessResponse<T>> => {
   const [sessionId, _] = parseSessionCookie(cookies().get(SESSION_COOKIE_KEY)?.value)
+  console.log(sessionId);
   const res = await fetch(`http://backend:8080${endpoint}`, {
     ...init,
     headers: {

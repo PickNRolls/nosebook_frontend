@@ -22,7 +22,13 @@ export const MainInfo = async (props: MainInfoProps) => {
 
   return <div className={cn("h-80 rounded-lg bg-slate-100 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
-      <Avatar className="absolute left-2 -top-16 size-[150px]" outline user={user} />
+      <Avatar
+        className="absolute left-2 -top-16 size-[150px]"
+        onlineMarkerClassName="right-[11.5px] bottom-[12px]"
+        outline
+        user={user}
+        canShowOnlineMarker
+      />
 
       <div className="basis-full ml-40 flex">
         <div className="h-full flex items-start flex-col">

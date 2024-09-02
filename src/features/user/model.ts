@@ -4,6 +4,9 @@ export type Model = {
   lastName: string;
   nick: string;
   createdAt: string;
+
+  lastOnlineAt: string;
+  online: boolean;
 };
 
 export function fullName(user: Model): string {

@@ -97,7 +97,14 @@ export const Post = (props: PostProps) => {
 
   return <ProfileBlock className="flex flex-col">
     <div className="flex px-3 pt-3 items-center">
-      <featuser.components.Avatar className="mr-3 size-[40px]" user={post.author} outline={false} />
+      <featuser.components.Avatar
+        className="mr-3 size-[40px]"
+        onlineMarkerClassName="size-[12px] border-[2px]"
+        user={post.author}
+        outline={false}
+        canShowOnlineMarker
+        showOnlyOnlineMarker
+      />
       <div className="flex flex-col">
         <Link href={featuser.profilePageHref(post.author.id)} className="text-[13px] text-sky-600 font-medium leading-[16px]">
           {post.author.firstName} {post.author.lastName}
