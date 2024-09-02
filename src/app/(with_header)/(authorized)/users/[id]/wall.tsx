@@ -39,7 +39,7 @@ export const Wall: React.FC<WallProps> = (props) => {
     return Boolean(publishedPost);
   };
 
-  const handleCommentSubmit = async (post: featpost.Model, comment: string) => {
+  const handleCommentSubmit = async (post: featpost.Model, comment: string): Promise<boolean> => {
     const publishedComment = await onCommentSubmit(post.id, comment);
 
     if (publishedComment) {
@@ -53,7 +53,11 @@ export const Wall: React.FC<WallProps> = (props) => {
 
         return next;
       });
+
+      return true;
     }
+
+    return false;
   };
 
   const handlePostRemove = async (post: featpost.Model) => {

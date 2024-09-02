@@ -16,7 +16,7 @@ export type WallProps = {
   publishedComments: Record<string, featcomment.Model[] | undefined>;
   onPostRemove: (post: Model) => void;
 
-  onCommentSubmit: (post: Model, comment: string) => void;
+  onCommentSubmit: (post: Model, comment: string) => Promise<boolean>;
   onCommentFetch: (postId: string, next: string) => Promise<dto.FindResult<featcomment.Model>>;
   onCommentLike: (comment: featcomment.Model) => Promise<boolean>;
   onCommentRemove: (comment: featcomment.Model) => Promise<boolean>;

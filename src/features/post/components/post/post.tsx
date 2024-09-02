@@ -27,7 +27,7 @@ export type PostProps = {
 
   onCommentLike: (comment: featcomment.Model) => Promise<boolean>;
   onCommentRemove: (comment: featcomment.Model) => Promise<boolean>;
-  onCommentSubmit: (post: Model, comment: string) => void;
+  onCommentSubmit: (post: Model, comment: string) => Promise<boolean>;
   onCommentFetch?: (next: string) => Promise<dto.FindResult<featcomment.Model>>;
 }
 
@@ -44,6 +44,7 @@ export const Post = (props: PostProps) => {
   const [nextCursor, setNextCursor] = useState(post.recentComments.next);
 
   const [removedCommentsMap, setRemovedCommentsMap] = useState<Record<string, boolean | undefined>>({});
+  const [commentsCount, setCommentsCount] = useState(post.recentComments.totalCount);
 
   const handleCommentClick = () => {
     setCommentSectionVisible(true);
@@ -51,9 +52,14 @@ export const Post = (props: PostProps) => {
     commentTextareaRef.current?.focus();
   };
 
-  const handleCommentSubmit = () => {
-    props.onCommentSubmit(post, comment);
+  const handleCommentSubmit = async () => {
+    const ok = await props.onCommentSubmit(post, comment);
+    if (!ok) {
+      return;
+    }
+
     setComment('');
+    setCommentsCount(prev => prev + 1);
     focusCommentAfterRenderRef.current = true;
     commentTextareaRef.current?.focus();
   };
@@ -73,6 +79,7 @@ export const Post = (props: PostProps) => {
       return;
     }
 
+    setCommentsCount(prev => prev - 1);
     setRemovedCommentsMap(prev => {
       return {
         ...prev,
@@ -136,7 +143,7 @@ export const Post = (props: PostProps) => {
           }
         }}
       />
-      <CommentButton onClick={handleCommentClick} />
+      <CommentButton count={commentsCount} onClick={handleCommentClick} />
       <RepostButton />
     </div>
 
