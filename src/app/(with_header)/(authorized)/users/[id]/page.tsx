@@ -2,9 +2,9 @@ import * as featuser from '@/features/user/server';
 import * as featcurrentuser from '@/features/current-user';
 import * as featpost from '@/features/post';
 import * as featcomment from '@/features/comment';
+import * as featfriend from '@/features/friendship/client';
 import * as dto from '@/dto';
 
-import { ProfileBlock } from "@/components/profile-block";
 import { serverRenderApi } from "@/serverRenderApi";
 import { actionApi } from "@/actionApi";
 
@@ -15,14 +15,17 @@ export default async function Page({ params }: {
     id: string;
   }
 }) {
-  const [me, user, postsResult] = await Promise.all([
+  const [me, user, postsResult, friendship] = await Promise.all([
     featcurrentuser.api.get(),
     serverRenderApi<featuser.Model>(`/users/${params.id}`, {
       method: 'GET'
     }),
     serverRenderApi<dto.FindResult<featpost.Model>>(`/posts?ownerId=${params.id}`, {
       method: 'GET'
-    })
+    }),
+    serverRenderApi<featfriend.Model>(`/friendship?userId=${params.id}`, {
+      method: 'GET',
+    }),
   ]);
 
   return (
@@ -123,11 +126,12 @@ export default async function Page({ params }: {
             }}
           />
         </div>
-        <div className="flex flex-col basis-1/3">
-          <ProfileBlock className="sticky top-16">
-            Friends
-          </ProfileBlock>
-        </div>
+
+        {friendship.data && (
+          <div className="flex flex-col basis-1/3">
+            <featfriend.components.ProfileBlock friendship={friendship.data} />
+          </div>
+        )}
       </div>
     </div>
   );

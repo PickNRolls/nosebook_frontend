@@ -99,7 +99,7 @@ export const Post = (props: PostProps) => {
     <div className="flex px-3 pt-3 items-center">
       <featuser.components.Avatar
         className="mr-3 size-[40px]"
-        onlineMarkerClassName="size-[12px] border-[2px]"
+        onlineMarkerClassName="!size-[12px] !border-[2px]"
         user={post.author}
         outline={false}
         canShowOnlineMarker
