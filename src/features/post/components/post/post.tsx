@@ -144,7 +144,7 @@ export const Post = (props: PostProps) => {
         }}
       />
       <CommentButton count={commentsCount} onClick={handleCommentClick} />
-      <RepostButton />
+      {false && <RepostButton />}
     </div>
 
     {comments.length > 0 && (
