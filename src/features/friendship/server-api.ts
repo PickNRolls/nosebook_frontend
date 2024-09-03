@@ -1,7 +1,10 @@
 import { actionApi } from "@/actionApi";
 import { serverRenderApi } from "@/serverRenderApi";
 
-import { Relation } from "./model";
+import * as dto from '@/dto';
+
+import { Model, Relation } from "./model";
+
 
 export const relationBetween = (sourceId: string, targetIds: string[]) => {
   const query = new URLSearchParams({
@@ -15,6 +18,36 @@ export const relationBetween = (sourceId: string, targetIds: string[]) => {
     method: 'GET'
   });
 };
+
+export const findByFilter = (filter: {
+  userId: string;
+  accepted: boolean;
+  onlyIncoming?: boolean;
+  onlyOutcoming?: boolean;
+  onlyOnline?: boolean;
+  limit?: number;
+}): Promise<dto.ApiResponse<dto.FindResult<Model>>> => {
+  const query = new URLSearchParams({
+    userId: filter.userId,
+  });
+  if (filter.limit != null) {
+    query.set('limit', filter.limit.toString());
+  }
+  if (filter.accepted) {
+    query.set('accepted', '');
+  }
+  if (filter.onlyIncoming) {
+    query.set('onlyIncoming', '');
+  }
+  if (filter.onlyOutcoming) {
+    query.set('onlyOutcoming', '')
+  }
+  if (filter.onlyOnline) {
+    query.set('onlyOnline', '');
+  }
+
+  return serverRenderApi<dto.FindResult<Model>>(`/friendship?${query.toString()}`)
+}
 
 export const sendRequest = (toUserId: string) => {
   return actionApi(`/friendship/send-request`, {

@@ -1,6 +1,6 @@
 import * as featcurrentuser from '@/features/current-user';
 
-import { Sidebar } from "@/components/sidebar";
+import { Sidebar } from "./sidebar";
 
 export default function Layout({
   children,
