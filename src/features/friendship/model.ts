@@ -1,14 +1,16 @@
 import * as featuser from '@/features/user/client';
 
-import * as dto from '@/dto';
-
 export type Relation = {
   friendIds?: string[];
   pendingRequesterIds?: string[];
   pendingResponderIds?: string[];
 }
 
-export type Model = dto.FindResult<featuser.Model>;
+export type Model = {
+  type: 'incoming' | 'outcoming';
+  accepted: boolean;
+  user: featuser.Model;
+};
 
 export type PageSection = 'all' | 'online';
 

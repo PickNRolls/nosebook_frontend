@@ -7,9 +7,11 @@ import { serverRenderApi } from "@/serverRenderApi";
 import { Link } from "@/components/link";
 import { PageBlock } from "@/components/page-block";
 import { Divider } from "@/components/divider";
+import { Button } from "@/components/button";
 
 import { listPageHref, Model, PageSection } from '@/features/friendship/client';
-import { Button } from "@/components/button";
+
+import * as dto from '@/dto';
 
 export type ListBlockProps = {
   id: string;
@@ -26,10 +28,10 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
     all,
     online
   ] = await Promise.all([
-    serverRenderApi<Model>(`/friendship?userId=${id}`, {
+    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${id}&accepted`, {
       method: 'GET'
     }),
-    serverRenderApi<Model>(`/friendship?userId=${id}&onlyOnline`, {
+    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${id}&accepted&onlyOnline`, {
       method: 'GET'
     }),
   ]);
@@ -53,12 +55,12 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
           </Link>
         </header>
 
-        {join(data?.data.map(friend => {
+        {join(data?.data.map(request => {
           return (
-            <div key={friend.id} className="flex gap-3">
-              <Link href={featuser.profilePageHref(friend.id)}>
+            <div key={request.user.id} className="flex gap-3">
+              <Link href={featuser.profilePageHref(request.user.id)}>
                 <featuser.components.Avatar
-                  user={friend}
+                  user={request.user}
                   className="size-[80px] border-none"
                   canShowOnlineMarker
                   showOnlyOnlineMarker
@@ -66,7 +68,7 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
               </Link>
               <div className="pt-1 flex w-full">
                 <div>
-                  <featuser.components.Link user={friend} />
+                  <featuser.components.Link user={request.user} />
                 </div>
                 <Button view="ghost" width="auto" className="ml-auto">
                   <svg className="text-slate-400" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="more_horizontal_24__Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="more_horizontal_24__more_horizontal_24"><path id="more_horizontal_24__Bounds" d="M24 0H0v24h24z"></path><path d="M18 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2c0-1.1.9-2 2-2Zm-6 4a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Zm-6 0a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Z" fill="currentColor"></path></g></g></svg>

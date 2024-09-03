@@ -3,13 +3,14 @@ import { FC } from "react";
 import { Link } from "@/components/link";
 
 import * as featuser from '@/features/user/client';
-
 import { Model } from '@/features/friendship/client';
+
+import * as dto from '@/dto';
 
 
 export type ProfileBlockRowProps = {
   title: string;
-  row: Model;
+  row: dto.FindResult<Model>;
   href: string;
   canShowOnlineMarker?: boolean;
 };
@@ -26,17 +27,17 @@ export const ProfileBlockRow: FC<ProfileBlockRowProps> = async (props) => {
         </span>
       </Link>
       <div className="flex -mx-3">
-        {row.data.map(friend => {
+        {row.data.map(request => {
           return (
-            <Link key={friend.id} href={featuser.profilePageHref(friend.id)} className="px-3 text-center flex flex-col items-center">
+            <Link key={request.user.id} href={featuser.profilePageHref(request.user.id)} className="px-3 text-center flex flex-col items-center">
               <featuser.components.Avatar
-                user={friend}
+                user={request.user}
                 className="size-[64px] border-none mb-[5px]"
                 onlineMarkerClassName="!size-[16px]"
                 canShowOnlineMarker={canShowOnlineMarker}
                 showOnlyOnlineMarker
               />
-              <span className="text-[13px] text-black font-normal pb-[8px]">{friend.firstName}</span>
+              <span className="text-[13px] text-black font-normal pb-[8px]">{request.user.firstName}</span>
             </Link>
           )
         })}

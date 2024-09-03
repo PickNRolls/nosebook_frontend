@@ -8,6 +8,8 @@ import { Divider } from "@/components/divider";
 import { listPageHref, Model } from '@/features/friendship/client';
 import { ProfileBlockRow } from "./profile-block-row";
 
+import * as dto from '@/dto';
+
 export type ProfileBlockProps = {
   userId: string;
 };
@@ -16,10 +18,10 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
   const { userId } = props;
 
   const [anyFriends, onlineFriends] = await Promise.all([
-    serverRenderApi<Model>(`/friendship?userId=${userId}&limit=4`, {
+    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${userId}&accepted&limit=4`, {
       method: 'GET',
     }),
-    serverRenderApi<Model>(`/friendship?userId=${userId}&limit=4&onlyOnline`, {
+    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${userId}&accepted&limit=4&onlyOnline`, {
       method: 'GET',
     }),
   ]);
