@@ -1,21 +1,16 @@
 import { FC } from "react";
 
-import * as featuser from '@/features/user/client';
-
 import { join } from '@/lib/array/join';
-import { serverRenderApi } from "@/serverRenderApi";
 import { Link } from "@/components/link";
 import { PageBlock } from "@/components/page-block";
 import { Divider } from "@/components/divider";
-import { Button } from "@/components/button";
 
-import { listPageHref, Model, PageSection } from '@/features/friendship/client';
-
-import * as dto from '@/dto';
+import * as featfriend from '@/features/friendship/server';
+import { ListBlockRow } from "./list-block-row";
 
 export type ListBlockProps = {
   id: string;
-  section: PageSection;
+  section: featfriend.PageSection;
 };
 
 export const ListBlock: FC<ListBlockProps> = async (props) => {
@@ -23,58 +18,91 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
 
   const isAll = section === 'all' || section == null;
   const isOnline = section === 'online';
+  const isIncomingRequests = section === 'incoming_requests';
 
   const [
     all,
-    online
+    online,
+    incomingRequests,
   ] = await Promise.all([
-    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${id}&accepted`, {
-      method: 'GET'
+    featfriend.api.findByFilter({
+      userId: id,
+      accepted: true,
     }),
-    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${id}&accepted&onlyOnline`, {
-      method: 'GET'
+    featfriend.api.findByFilter({
+      userId: id,
+      accepted: true,
+      onlyOnline: true,
+    }),
+    featfriend.api.findByFilter({
+      userId: id,
+      accepted: false,
+      viewed: false,
+      onlyIncoming: true,
+      limit: 10,
     }),
   ]);
 
-  const data = isAll ? all.data : online.data;
+  let data = all.data;
+  if (isOnline) {
+    data = online.data;
+  }
+  if (isIncomingRequests) {
+    data = incomingRequests.data;
+  }
+
+  let header = (
+    <header className="flex gap-[6px] mb-5">
+      <Link view="button" selected={isAll} href={featfriend.listPageHref(id, {
+        section: 'all',
+      })}>
+        Все друзья <span className="text-slate-400 pl-1">{all.data?.totalCount}</span>
+      </Link>
+
+      <Link view="button" selected={isOnline} href={featfriend.listPageHref(id, {
+        section: 'online',
+      })}>
+        Друзья онлайн <span className="text-slate-400 pl-1">{online.data?.totalCount}</span>
+      </Link>
+    </header>
+  );
+
+  if (section === 'incoming_requests') {
+    header = (
+      <header className="flex gap-[6px] mb-5">
+        <Link
+          view="button"
+          selected={isIncomingRequests}
+          href={featfriend.listPageHref(id, {
+            section: 'incoming_requests',
+          })}
+        >
+          Входящие <span className="text-slate-400 pl-1">{incomingRequests.data?.totalCount}</span>
+        </Link>
+      </header>
+    );
+  }
+
+  const handleAcceptClick = async (request: featfriend.Model) => {
+    'use server';
+
+    const res = await featfriend.api.acceptRequest(request.user.id);
+    return res.ok;
+  }
 
   return (
     <PageBlock>
       <div className="p-3 pb-1">
-        <header className="flex gap-[6px] mb-5">
-          <Link view="button" selected={isAll} href={listPageHref(id, {
-            section: 'all',
-          })}>
-            Все друзья <span className="text-slate-400 pl-1">{all.data?.totalCount}</span>
-          </Link>
-
-          <Link view="button" selected={isOnline} href={listPageHref(id, {
-            section: 'online',
-          })}>
-            Друзья онлайн <span className="text-slate-400 pl-1">{online.data?.totalCount}</span>
-          </Link>
-        </header>
+        {header}
 
         {join(data?.data.map(request => {
           return (
-            <div key={request.user.id} className="flex gap-3">
-              <Link href={featuser.profilePageHref(request.user.id)}>
-                <featuser.components.Avatar
-                  user={request.user}
-                  className="size-[80px] border-none"
-                  canShowOnlineMarker
-                  showOnlyOnlineMarker
-                />
-              </Link>
-              <div className="pt-1 flex w-full">
-                <div>
-                  <featuser.components.Link user={request.user} />
-                </div>
-                <Button view="ghost" width="auto" className="ml-auto">
-                  <svg className="text-slate-400" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="more_horizontal_24__Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="more_horizontal_24__more_horizontal_24"><path id="more_horizontal_24__Bounds" d="M24 0H0v24h24z"></path><path d="M18 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2c0-1.1.9-2 2-2Zm-6 4a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Zm-6 0a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Z" fill="currentColor"></path></g></g></svg>
-                </Button>
-              </div>
-            </div>
+            <ListBlockRow
+              key={request.user.id}
+              id={props.id}
+              request={request}
+              onAcceptClick={handleAcceptClick}
+            />
           );
         }) || [], <Divider key="divider" />)}
       </div>

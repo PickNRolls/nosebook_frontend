@@ -12,7 +12,7 @@ export default async function Page({ searchParams }: {
         <featfriend.components.ListBlock id={searchParams.id} section={searchParams.section} />
       </div>
       <div className="basis-[39%]">
-        <featfriend.components.ContextBlock id={searchParams.id} />
+        <featfriend.components.ContextBlock id={searchParams.id} section={searchParams.section} />
       </div>
     </div>
   );
