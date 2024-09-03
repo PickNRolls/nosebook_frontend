@@ -2,12 +2,11 @@ import { FC } from "react";
 
 import { join } from '@/lib/array/join';
 import { serverRenderApi } from "@/serverRenderApi";
-import { ProfileBlock as ProfileBlockComponent } from "@/components/profile-block";
+import { PageBlock } from "@/components/page-block";
 import { Divider } from "@/components/divider";
 
-import { Model } from '@/features/friendship/client';
+import { listPageHref, Model } from '@/features/friendship/client';
 import { ProfileBlockRow } from "./profile-block-row";
-
 
 export type ProfileBlockProps = {
   userId: string;
@@ -27,11 +26,28 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
 
   const rows: React.ReactNode[] = []
   if (onlineFriends.data && onlineFriends.data.totalCount > 0) {
-    rows.push(<ProfileBlockRow key="online" title="Друзья онлайн" row={onlineFriends.data} canShowOnlineMarker />)
+    rows.push(
+      <ProfileBlockRow
+        key="online"
+        title="Друзья онлайн"
+        row={onlineFriends.data}
+        canShowOnlineMarker
+        href={listPageHref(userId, {
+          section: 'online',
+        })}
+      />
+    )
   }
 
   if (anyFriends.data && anyFriends.data.totalCount > 0) {
-    rows.push(<ProfileBlockRow key="all" title="Друзья" row={anyFriends.data} />)
+    rows.push(
+      <ProfileBlockRow
+        key="all"
+        title="Друзья"
+        row={anyFriends.data}
+        href={listPageHref(userId)}
+      />
+    )
   }
 
   if (!rows.length) {
@@ -39,8 +55,8 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
   }
 
   return (
-    <ProfileBlockComponent className="sticky top-16 flex flex-col px-5 py-3">
+    <PageBlock className="sticky top-16 flex flex-col px-5 py-3">
       {join(rows, <Divider key="divider" />)}
-    </ProfileBlockComponent>
+    </PageBlock>
   );
 }

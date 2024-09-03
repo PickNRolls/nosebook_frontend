@@ -5,7 +5,7 @@ import { useState } from "react";
 import * as featuser from '@/features/user/client';
 import * as featcurrentuser from '@/features/current-user';
 
-import { ProfileBlock } from "@/components/profile-block";
+import { PageBlock } from "@/components/page-block";
 import { Button } from "@/components/button";
 import { Textarea } from "@/components/textarea";
 
@@ -29,7 +29,7 @@ export const Form: React.FC<FormProps> = (props) => {
 
 
   return (
-    <ProfileBlock className="flex flex-col">
+    <PageBlock className="flex flex-col">
       <div className="flex pl-3">
         <featuser.components.Avatar className="-ml-[2px]" size="xs" user={me} />
         <Textarea
@@ -54,6 +54,6 @@ export const Form: React.FC<FormProps> = (props) => {
           </Button>
         </div>
       )}
-    </ProfileBlock>
+    </PageBlock>
   );
 };

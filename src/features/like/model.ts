@@ -1,7 +1,7 @@
-import * as featureUser from '../user';
+import * as featuser from '@/features/user/client';
 
 export type Model = {
   count: number;
-  randomFiveLikers: featureUser.Model[];
+  randomFiveLikers: featuser.Model[];
   liked: boolean;
 }

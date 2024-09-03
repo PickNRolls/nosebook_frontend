@@ -4,6 +4,8 @@ import cn from 'classnames';
 
 export type LinkProps = {
   href?: string;
+  view?: 'button-link' | 'button' | 'no-style';
+  selected?: boolean;
   children: ReactNode;
   className?: string;
   onClick?: () => void;
@@ -13,8 +15,11 @@ export const Link: FC<LinkProps> = (props) => {
   const { href, ...rest } = props;
   const className = cn(
     props.className,
-    "text-sky-600 font-medium text-[13px] leading-[14px] inline-block cursor-pointer",
-    "hover:underline"
+    "text-[13px] leading-[14px] cursor-pointer inline-block",
+    props.view == null && "text-sky-600 font-medium hover:underline",
+    props.view === 'button-link' && "hover:bg-slate-150 py-2 w-full rounded-md",
+    props.view === 'button' && "text-[14px] font-medium border border-transparent py-[6px] px-2 rounded-md text-neutral-500 transition ease-in-out duration-250 hover:bg-slate-100",
+    props.view === 'button' && props.selected && "!text-sky-600 !border-slate-200 shadow-sm",
   );
 
   if (!href) {

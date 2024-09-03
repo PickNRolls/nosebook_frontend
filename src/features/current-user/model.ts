@@ -1,3 +1,3 @@
-import * as featureUser from '../user';
+import * as featuser from '@/features/user/client';
 
-export type Model = featureUser.Model;
+export type Model = featuser.Model;

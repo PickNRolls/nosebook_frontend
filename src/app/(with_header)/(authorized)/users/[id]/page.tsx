@@ -17,9 +17,7 @@ export default async function Page({ params }: {
 }) {
   const [me, user, postsResult] = await Promise.all([
     featcurrentuser.api.get(),
-    serverRenderApi<featuser.Model>(`/users/${params.id}`, {
-      method: 'GET'
-    }),
+    featuser.api.findById(params.id),
     serverRenderApi<dto.FindResult<featpost.Model>>(`/posts?ownerId=${params.id}`, {
       method: 'GET'
     }),

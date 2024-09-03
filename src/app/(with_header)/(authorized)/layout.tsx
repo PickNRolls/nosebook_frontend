@@ -14,7 +14,7 @@ export default function Layout({
       <div className="flex justify-center">
         <div className="container flex">
           <Sidebar />
-          <div className="basis-5/6 pt-4">
+          <div className="basis-[85%] pt-4">
             {children}
           </div>
         </div>

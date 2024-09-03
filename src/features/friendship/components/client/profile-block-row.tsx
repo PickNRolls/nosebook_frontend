@@ -3,12 +3,14 @@ import { FC } from "react";
 import { Link } from "@/components/link";
 
 import * as featuser from '@/features/user/client';
+
 import { Model } from '@/features/friendship/client';
 
 
 export type ProfileBlockRowProps = {
   title: string;
   row: Model;
+  href: string;
   canShowOnlineMarker?: boolean;
 };
 
@@ -17,12 +19,12 @@ export const ProfileBlockRow: FC<ProfileBlockRowProps> = async (props) => {
 
   return (
     <div>
-      <h3 className="font-medium text-[14px] leading-[18px] flex gap-[6px] py-[8px] mb-[6px]">
+      <Link className="font-medium text-[14px] leading-[18px] flex gap-[6px] py-[8px] mb-[6px]" view="no-style" href={props.href}>
         {title}
         <span className="text-[13px] text-gray-500">
           {row.totalCount}
         </span>
-      </h3>
+      </Link>
       <div className="flex -mx-3">
         {row.data.map(friend => {
           return (

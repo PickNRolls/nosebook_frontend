@@ -9,7 +9,7 @@ import * as featcomment from '@/features/comment';
 import * as featrealtimedate from '@/features/realtime-date';
 import * as dto from '@/dto';
 
-import { ProfileBlock } from "@/components/profile-block";
+import { PageBlock } from "@/components/page-block";
 import { Link } from "@/components/link";
 import { PostCommentInput } from "@/components/post-comment-input";
 
@@ -95,7 +95,7 @@ export const Post = (props: PostProps) => {
 
   const showCommentForm = commentSectionVisible || comments.length > 0
 
-  return <ProfileBlock className="flex flex-col">
+  return <PageBlock className="flex flex-col">
     <div className="flex px-3 pt-3 items-center">
       <featuser.components.Avatar
         className="mr-3 size-[40px]"
@@ -194,6 +194,6 @@ export const Post = (props: PostProps) => {
         }}
       />
     )}
-  </ProfileBlock>;
+  </PageBlock>;
 };
 
