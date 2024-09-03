@@ -1,4 +1,4 @@
-import * as decline from "@/features/string/decline";
+import * as decline from "@/lib/string/decline";
 
 const declineSeconds = decline.create({
   1: 'секунду',

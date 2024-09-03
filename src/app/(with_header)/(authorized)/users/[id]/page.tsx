@@ -15,16 +15,13 @@ export default async function Page({ params }: {
     id: string;
   }
 }) {
-  const [me, user, postsResult, friendship] = await Promise.all([
+  const [me, user, postsResult] = await Promise.all([
     featcurrentuser.api.get(),
     serverRenderApi<featuser.Model>(`/users/${params.id}`, {
       method: 'GET'
     }),
     serverRenderApi<dto.FindResult<featpost.Model>>(`/posts?ownerId=${params.id}`, {
       method: 'GET'
-    }),
-    serverRenderApi<featfriend.Model>(`/friendship?userId=${params.id}`, {
-      method: 'GET',
     }),
   ]);
 
@@ -127,11 +124,9 @@ export default async function Page({ params }: {
           />
         </div>
 
-        {friendship.data && (
-          <div className="flex flex-col basis-1/3">
-            <featfriend.components.ProfileBlock friendship={friendship.data} />
-          </div>
-        )}
+        <div className="flex flex-col basis-1/3">
+          <featfriend.components.ProfileBlock userId={params.id} />
+        </div>
       </div>
     </div>
   );

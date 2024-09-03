@@ -1,36 +1,46 @@
 import { FC } from "react";
 
+import { join } from '@/lib/array/join';
+import { serverRenderApi } from "@/serverRenderApi";
 import { ProfileBlock as ProfileBlockComponent } from "@/components/profile-block";
+import { Divider } from "@/components/divider";
 
-import * as featuser from '@/features/user/client';
 import { Model } from '@/features/friendship/client';
-import { Link } from "@/components/link";
+import { ProfileBlockRow } from "./profile-block-row";
+
 
 export type ProfileBlockProps = {
-  friendship: Model;
+  userId: string;
 };
 
-export const ProfileBlock: FC<ProfileBlockProps> = (props) => {
-  const { friendship } = props;
+export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
+  const { userId } = props;
+
+  const [anyFriends, onlineFriends] = await Promise.all([
+    serverRenderApi<Model>(`/friendship?userId=${userId}&limit=4`, {
+      method: 'GET',
+    }),
+    serverRenderApi<Model>(`/friendship?userId=${userId}&limit=4&onlyOnline`, {
+      method: 'GET',
+    }),
+  ]);
+
+  const rows: React.ReactNode[] = []
+  if (onlineFriends.data && onlineFriends.data.totalCount > 0) {
+    rows.push(<ProfileBlockRow key="online" title="Друзья онлайн" row={onlineFriends.data} canShowOnlineMarker />)
+  }
+
+  if (anyFriends.data && anyFriends.data.totalCount > 0) {
+    rows.push(<ProfileBlockRow key="all" title="Друзья" row={anyFriends.data} />)
+  }
+
+  if (!rows.length) {
+    return null;
+  }
 
   return (
-    <ProfileBlockComponent className="sticky top-16 flex flex-col px-5 py-5 pt-3">
-      <h3 className="font-medium text-[14px] leading-[18px] flex gap-[6px] py-[10px] mb-1">
-        Друзья
-        <span className="text-[13px] text-gray-500">
-          {friendship.totalCount}
-        </span>
-      </h3>
-      <div className="flex -mx-3">
-        {friendship.data.map(friend => {
-          return (
-            <Link key={friend.id} href={featuser.profilePageHref(friend.id)} className="px-3 py-1 text-center flex flex-col items-center">
-              <featuser.components.Avatar user={friend} className="size-[64px] border-none mb-[5px]" />
-              <span className="text-[13px] text-black font-normal">{friend.firstName}</span>
-            </Link>
-          )
-        })}
-      </div>
+    <ProfileBlockComponent className="sticky top-16 flex flex-col px-5 py-3">
+      {join(rows, <Divider key="divider" />)}
     </ProfileBlockComponent>
   );
 }
