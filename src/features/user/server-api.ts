@@ -6,3 +6,4 @@ export const findById = (id: string) => {
     method: 'GET'
   });
 }
+

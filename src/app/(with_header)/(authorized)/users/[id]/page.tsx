@@ -2,7 +2,7 @@ import * as featuser from '@/features/user/server';
 import * as featcurrentuser from '@/features/current-user';
 import * as featpost from '@/features/post';
 import * as featcomment from '@/features/comment';
-import * as featfriend from '@/features/friendship/client';
+import * as featfriend from '@/features/friendship/server';
 import * as dto from '@/dto';
 
 import { serverRenderApi } from "@/serverRenderApi";
@@ -15,7 +15,7 @@ export default async function Page({ params }: {
     id: string;
   }
 }) {
-  const [me, user, postsResult] = await Promise.all([
+  const [currentUser, user, postsResult] = await Promise.all([
     featcurrentuser.api.get(),
     featuser.api.findById(params.id),
     serverRenderApi<dto.FindResult<featpost.Model>>(`/posts?ownerId=${params.id}`, {
@@ -23,13 +23,18 @@ export default async function Page({ params }: {
     }),
   ]);
 
+  if (!currentUser?.data) {
+    return null;
+  }
+
+
   return (
     <div>
       <featuser.components.MainInfo user={user?.data} className="mb-4" />
       <div className="flex gap-4">
         <div className="flex flex-col gap-4 basis-2/3">
           <Wall
-            me={me!.data!}
+            me={currentUser!.data!}
             initialPostsQueryResult={postsResult?.data}
             onCommentSubmit={async (postId, comment) => {
               'use server';
