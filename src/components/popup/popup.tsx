@@ -12,7 +12,7 @@ export type PopupProps = {
 export const Popup: FC<PopupProps> = (props) => {
   const [popper, setPopper] = useState<HTMLDivElement | null>(null);
   const popperResult = usePopper(props.anchor, popper, {
-    placement: 'auto',
+    placement: 'bottom-end',
   });
 
   if (!props.visible) {
@@ -21,7 +21,7 @@ export const Popup: FC<PopupProps> = (props) => {
 
   return (
     <div {...popperResult.attributes.popper} ref={setPopper} style={popperResult.styles.popper}>
-      <div className="bg-white rounded-lg shadow-md m-2 p-2">
+      <div className="bg-white rounded-lg shadow-lg m-2 p-1 border border-slate-200">
         {props.children}
       </div>
     </div>

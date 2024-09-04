@@ -12,7 +12,7 @@ export type Model = {
   user: featuser.Model;
 };
 
-export type PageSection = 'all' | 'online' | 'incoming_requests';
+export type PageSection = 'all' | 'online' | 'incoming_requests' | 'outcoming_requests';
 
 export function listPageHref(userId: string, opts?: {
   section?: PageSection;

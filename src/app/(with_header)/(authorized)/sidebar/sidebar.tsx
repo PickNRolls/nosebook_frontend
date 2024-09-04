@@ -26,6 +26,7 @@ export const Sidebar = async () => {
     featfriend.api.findByFilter({
       userId: me.data.id,
       accepted: false,
+      viewed: false,
       onlyIncoming: true,
       limit: 1,
     }),

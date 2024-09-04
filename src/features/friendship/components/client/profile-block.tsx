@@ -1,14 +1,12 @@
 import { FC } from "react";
 
+import * as featfriend from '@/features/friendship/server';
+
 import { join } from '@/lib/array/join';
-import { serverRenderApi } from "@/serverRenderApi";
 import { PageBlock } from "@/components/page-block";
 import { Divider } from "@/components/divider";
 
-import { listPageHref, Model } from '@/features/friendship/client';
 import { ProfileBlockRow } from "./profile-block-row";
-
-import * as dto from '@/dto';
 
 export type ProfileBlockProps = {
   userId: string;
@@ -18,11 +16,16 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
   const { userId } = props;
 
   const [anyFriends, onlineFriends] = await Promise.all([
-    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${userId}&accepted&limit=4`, {
-      method: 'GET',
+    featfriend.api.findByFilter({
+      userId,
+      accepted: true,
+      limit: 4,
     }),
-    serverRenderApi<dto.FindResult<Model>>(`/friendship?userId=${userId}&accepted&limit=4&onlyOnline`, {
-      method: 'GET',
+    featfriend.api.findByFilter({
+      userId,
+      accepted: true,
+      limit: 4,
+      onlyOnline: true,
     }),
   ]);
 
@@ -34,7 +37,7 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
         title="Друзья онлайн"
         row={onlineFriends.data}
         canShowOnlineMarker
-        href={listPageHref(userId, {
+        href={featfriend.listPageHref(userId, {
           section: 'online',
         })}
       />
@@ -47,7 +50,7 @@ export const ProfileBlock: FC<ProfileBlockProps> = async (props) => {
         key="all"
         title="Друзья"
         row={anyFriends.data}
-        href={listPageHref(userId)}
+        href={featfriend.listPageHref(userId)}
       />
     )
   }

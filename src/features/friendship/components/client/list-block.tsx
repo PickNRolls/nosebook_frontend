@@ -19,11 +19,13 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
   const isAll = section === 'all' || section == null;
   const isOnline = section === 'online';
   const isIncomingRequests = section === 'incoming_requests';
+  const isOutcomingRequests = section === 'outcoming_requests';
 
   const [
     all,
     online,
     incomingRequests,
+    outcomingRequests,
   ] = await Promise.all([
     featfriend.api.findByFilter({
       userId: id,
@@ -37,9 +39,12 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
     featfriend.api.findByFilter({
       userId: id,
       accepted: false,
-      viewed: false,
       onlyIncoming: true,
-      limit: 10,
+    }),
+    featfriend.api.findByFilter({
+      userId: id,
+      accepted: false,
+      onlyOutcoming: true,
     }),
   ]);
 
@@ -49,6 +54,9 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
   }
   if (isIncomingRequests) {
     data = incomingRequests.data;
+  }
+  if (isOutcomingRequests) {
+    data = outcomingRequests.data;
   }
 
   let header = (
@@ -83,12 +91,35 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
     );
   }
 
+  if (section === 'outcoming_requests') {
+    header = (
+      <header className="flex gap-[6px] mb-5">
+        <Link
+          view="button"
+          selected={isOutcomingRequests}
+          href={featfriend.listPageHref(id, {
+            section: 'outcoming_requests',
+          })}
+        >
+          Исходящие <span className="text-slate-400 pl-1">{outcomingRequests.data?.totalCount}</span>
+        </Link>
+      </header>
+    );
+  }
+
   const handleAcceptClick = async (request: featfriend.Model) => {
     'use server';
 
     const res = await featfriend.api.acceptRequest(request.user.id);
     return res.ok;
-  }
+  };
+
+  const handleRemoveClick = async (request: featfriend.Model) => {
+    'use server';
+
+    const res = await featfriend.api.removeFriend(request.user.id);
+    return res.ok;
+  };
 
   return (
     <PageBlock>
@@ -102,6 +133,7 @@ export const ListBlock: FC<ListBlockProps> = async (props) => {
               id={props.id}
               request={request}
               onAcceptClick={handleAcceptClick}
+              onRemoveClick={handleRemoveClick}
             />
           );
         }) || [], <Divider key="divider" />)}

@@ -21,7 +21,7 @@ export const relationBetween = (sourceId: string, targetIds: string[]) => {
 
 export const findByFilter = (filter: {
   userId: string;
-  accepted: boolean;
+  accepted?: boolean;
   viewed?: boolean;
   onlyIncoming?: boolean;
   onlyOutcoming?: boolean;
@@ -34,10 +34,10 @@ export const findByFilter = (filter: {
   if (filter.limit != null) {
     query.set('limit', filter.limit.toString());
   }
-  if (filter.accepted) {
-    query.set('accepted', '');
+  if (filter.accepted != null) {
+    query.set('accepted', String(filter.accepted));
   }
-  if (filter.viewed) {
+  if (filter.viewed != null) {
     query.set('viewed', String(filter.viewed));
   }
   if (filter.onlyIncoming) {

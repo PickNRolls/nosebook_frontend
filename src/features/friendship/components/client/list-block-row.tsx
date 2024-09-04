@@ -7,13 +7,15 @@ import * as featuser from '@/features/user/client';
 import { Link } from "@/components/link";
 import { Button } from "@/components/button";
 
-import * as featfriend from '@/features/friendship/server';
+import * as featfriend from '@/features/friendship/model';
 import { useRouter } from "next/navigation";
+import { PopupOptions } from "@/components/popup-options";
 
 export type ListBlockRowProps = {
   id: string;
   request: featfriend.Model;
   onAcceptClick: (request: featfriend.Model) => Promise<boolean>;
+  onRemoveClick: (request: featfriend.Model) => Promise<boolean>;
 };
 
 export const ListBlockRow: FC<ListBlockRowProps> = (props) => {
@@ -27,6 +29,7 @@ export const ListBlockRow: FC<ListBlockRowProps> = (props) => {
         <featuser.components.Avatar
           user={request.user}
           className="size-[80px] border-none"
+          onlineMarkerClassName="!size-[16px] right-1 bottom-1"
           canShowOnlineMarker
           showOnlyOnlineMarker
         />
@@ -53,9 +56,32 @@ export const ListBlockRow: FC<ListBlockRowProps> = (props) => {
           )}
         </div>
         {request.accepted && (
-          <Button view="ghost" width="auto" className="ml-auto">
-            <svg className="text-slate-400" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="more_horizontal_24__Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g id="more_horizontal_24__more_horizontal_24"><path id="more_horizontal_24__Bounds" d="M24 0H0v24h24z"></path><path d="M18 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2c0-1.1.9-2 2-2Zm-6 4a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Zm-6 0a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Z" fill="currentColor"></path></g></g></svg>
-          </Button>
+          <PopupOptions
+            className="ml-auto"
+            options={[
+              {
+                id: 'remove',
+                type: 'button',
+                children: 'Удалить из друзей',
+                onClick: async () => {
+                  const ok = await props.onRemoveClick(request)
+                  if (!ok) {
+                    return;
+                  }
+
+                  router.refresh();
+                },
+              },
+              {
+                id: 'list',
+                type: 'link',
+                children: 'Просмотреть друзей',
+                href: featfriend.listPageHref(request.user.id)
+              }
+            ]}
+          >
+            <svg className="text-slate-400" width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><g id="more_horizontal_24__Page-2" stroke="none" strokeWidth="1" fill="none" fillRule="evenodd"><g id="more_horizontal_24__more_horizontal_24"><path id="more_horizontal_24__Bounds" d="M24 0H0v24h24z"></path><path d="M18 10a2 2 0 0 1 2 2 2 2 0 0 1-2 2 2 2 0 0 1-2-2c0-1.1.9-2 2-2Zm-6 4a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Zm-6 0a2 2 0 0 1-2-2c0-1.1.9-2 2-2a2 2 0 0 1 2 2 2 2 0 0 1-2 2Z" fill="currentColor"></path></g></g></svg>
+          </PopupOptions>
         )}
       </div>
     </div>

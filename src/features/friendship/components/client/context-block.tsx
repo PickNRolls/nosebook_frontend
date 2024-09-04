@@ -9,7 +9,6 @@ import { PageBlock } from "@/components/page-block";
 import { Divider } from "@/components/divider";
 import { Count } from "@/components/count";
 
-
 export type ContextBlockProps = {
   id: string;
   section: featfriend.PageSection;
@@ -19,15 +18,19 @@ export const ContextBlock: FC<ContextBlockProps> = async (props) => {
   const [
     currentUser,
     incomingRequests,
+    outcomingRequests,
     user,
   ] = await Promise.all([
     featcurrentuser.api.get(),
     featfriend.api.findByFilter({
       userId: props.id,
       onlyIncoming: true,
-      viewed: false,
       accepted: false,
-      limit: 1,
+    }),
+    featfriend.api.findByFilter({
+      userId: props.id,
+      onlyOutcoming: true,
+      accepted: false,
     }),
     featuser.api.findById(props.id),
   ]);
@@ -56,15 +59,27 @@ export const ContextBlock: FC<ContextBlockProps> = async (props) => {
       >
         Мои друзья
       </Link>
+
       <Link
         view="button-link"
-        className="h-[36px] px-[15px] flex items-center leading-[18px]"
+        className="h-[36px] px-[15px] flex items-center leading-[18px] mb-[2px]"
         href={featfriend.listPageHref(props.id, {
           section: 'incoming_requests',
         })}
         selected={props.section === 'incoming_requests'}
       >
         Заявки в друзья <Count className="ml-4">{incomingRequests.data?.totalCount}</Count>
+      </Link>
+
+      <Link
+        view="button-link"
+        className="h-[36px] px-[15px] flex items-center leading-[18px]"
+        href={featfriend.listPageHref(props.id, {
+          section: 'outcoming_requests',
+        })}
+        selected={props.section === 'outcoming_requests'}
+      >
+        Исходящие заявки <Count className="ml-4">{outcomingRequests.data?.totalCount}</Count>
       </Link>
     </PageBlock>
   );

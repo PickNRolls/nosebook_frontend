@@ -23,7 +23,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const rounded = props.rounded ?? 'lg';
   const px = props.px ?? 'md';
   const className = cn(
-    'font-medium text-sm transition duration-150 flex items-center',
+    'font-medium text-sm transition duration-150 flex items-center text-center justify-center',
     width === 'full' && 'w-full',
     width === 'auto' && 'w-auto',
     height === 'lg' && 'h-9',
