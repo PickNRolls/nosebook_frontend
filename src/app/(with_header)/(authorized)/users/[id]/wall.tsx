@@ -1,11 +1,14 @@
 'use client';
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 
 import * as featcurrentuser from '@/features/current-user';
 import * as featpost from '@/features/post';
 import * as featcomment from '@/features/comment';
 import * as dto from '@/dto';
+
+import { useCursorFetch } from "@/components/use-cursor-fetch";
+import { Spinner } from "@/components/spinner";
 
 
 export type WallProps = {
@@ -24,22 +27,25 @@ export type WallProps = {
 export const Wall: React.FC<WallProps> = (props) => {
   const { me, initialPostsQueryResult, onPostPublish, onPostRemove, onCommentSubmit, onFetch } = props;
 
-  const currentQuery = useRef(initialPostsQueryResult);
-  const [posts, setPosts] = useState(initialPostsQueryResult?.data || []);
+  const { data: fetchedPosts, observer, loading } = useCursorFetch({
+    initial: initialPostsQueryResult,
+    onFetch,
+  });
+  const [publishedPosts, setPublishedPosts] = useState<featpost.Model[]>([]);
+  const [removedPostMap, setRemovedPostMap] = useState<Record<string, boolean | undefined>>({});
   const [publishedPostComments, setPublishedPostComments] = useState<Record<string, featcomment.Model[]>>({})
-  const observableRef = useRef<HTMLDivElement>(null);
 
   const handleSubmit = async (message: string) => {
     const publishedPost = await onPostPublish(message);
 
     if (publishedPost) {
-      setPosts(posts => [publishedPost, ...posts]);
+      setPublishedPosts(posts => [publishedPost, ...posts]);
     }
 
     return Boolean(publishedPost);
   };
 
-  const handleCommentSubmit = async (post: featpost.Model, comment: string): Promise<boolean> => {
+  const handleCommentSubmit = async (post: featpost.Model, comment: string) => {
     const publishedComment = await onCommentSubmit(post.id, comment);
 
     if (publishedComment) {
@@ -62,35 +68,10 @@ export const Wall: React.FC<WallProps> = (props) => {
 
   const handlePostRemove = async (post: featpost.Model) => {
     await onPostRemove(post);
-    setPosts((posts) => posts.filter(p => p.id !== post.id))
+    setRemovedPostMap(prev => ({ ...prev, [post.id]: true }))
   };
 
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(async entry => {
-        if (entry.intersectionRatio === 0) {
-          return;
-        }
-
-        if (!currentQuery.current?.next) {
-          return;
-        }
-
-        const res = await onFetch(currentQuery.current.next);
-        if (res) {
-          currentQuery.current = res;
-          setPosts((posts) => [...posts, ...res.data])
-        }
-      });
-    }, {
-      threshold: 0.1
-    });
-
-    observer.observe(observableRef.current!);
-    return () => {
-      observer.disconnect();
-    };
-  }, [onFetch]);
+  const posts = publishedPosts.concat(fetchedPosts).filter(post => !removedPostMap[post.id]);
 
   return (
     <>
@@ -109,7 +90,8 @@ export const Wall: React.FC<WallProps> = (props) => {
         onCommentLike={props.onCommentLike}
         onCommentRemove={props.onCommentRemove}
       />
-      <div className="relative -top-[500px]" ref={observableRef} />
+      {observer}
+      {loading && <Spinner />}
     </>
   )
 }

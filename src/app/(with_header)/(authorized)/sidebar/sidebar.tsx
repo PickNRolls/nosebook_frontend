@@ -23,15 +23,17 @@ export const Sidebar = async () => {
     return null;
   }
 
-  const [incomingFriendRequests] = await Promise.all([
+  const [
+    incomingFriendRequests
+  ] = await Promise.all([
     featfriend.api.findByFilter({
       userId: me.data.id,
       accepted: false,
       viewed: false,
       onlyIncoming: true,
-      limit: 1,
     }),
   ]);
+
 
   return (
     <aside className="basis-[15%] shrink-0 pt-4 mr-1">
