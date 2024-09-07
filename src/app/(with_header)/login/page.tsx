@@ -6,7 +6,6 @@ import * as featuser from '@/features/user/server';
 
 import { actionApi } from "@/actionApi";
 import { Auth } from "@/components/auth";
-import { SESSION_COOKIE_KEY } from "@/const/auth";
 
 export default function Page() {
   return (
@@ -25,12 +24,12 @@ export default function Page() {
           user = u;
 
           const now = new Date();
-          cookies().set(SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
+          cookies().set(featauth.SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
             path: '/',
-            domain: 'localhost',
             expires: now.setHours(now.getHours() + 48),
             httpOnly: true
-          })
+          });
+
         }).catch(res => res).finally(() => {
           if (user) {
             redirect(featuser.profilePageHref(user.id))
@@ -51,12 +50,11 @@ export default function Page() {
           const { user: u, session } = res!.data!;
 
           const now = new Date();
-          cookies().set(SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
+          cookies().set(featauth.SESSION_COOKIE_KEY, featauth.generateSessionCookie(session.sessionId, u.id), {
             path: '/',
-            domain: 'localhost',
             expires: now.setHours(now.getHours() + 48),
             httpOnly: true
-          })
+          });
 
           user = u;
           return res;

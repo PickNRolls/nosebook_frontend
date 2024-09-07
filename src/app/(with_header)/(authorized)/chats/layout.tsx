@@ -1,4 +1,4 @@
-import { Header } from "@/components/header";
+import * as featchat from '@/features/chat/server';
 
 export default function Layout({
   children,
@@ -6,10 +6,10 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="pt-12 h-full">
-      <Header />
+    <featchat.components.Messenger>
       {children}
-    </div>
+    </featchat.components.Messenger>
   );
 }
+
 

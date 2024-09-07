@@ -1,5 +1,5 @@
 import cn from 'classnames';
-import { formatDistanceToNow } from 'date-fns';
+import { formatDistanceToNow } from 'date-fns/formatDistanceToNow';
 import locale from '@/components/date-fns/ru-short';
 
 import { Model } from '../../model';

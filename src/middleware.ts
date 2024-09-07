@@ -1,11 +1,10 @@
 import { NextResponse, type NextRequest } from 'next/server'
-import { SESSION_COOKIE_KEY } from './const/auth';
 
 import * as featauth from '@/features/auth';
 import * as featuser from '@/features/user/client';
 
 export async function middleware(request: NextRequest) {
-  const session = request.cookies.get(SESSION_COOKIE_KEY)?.value
+  const session = request.cookies.get(featauth.SESSION_COOKIE_KEY)?.value
 
   if (!session && !request.nextUrl.pathname.startsWith('/login')) {
     return NextResponse.redirect(new URL('/login', request.url));
@@ -22,11 +21,11 @@ export async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     {
-      source: '/((?!api|_next/static|_next/image|.*\\.png$).*)',
+      source: '/((?!api|connect/ws|_next/static|_next/image|.*\\.png$).*)',
       missing: [
         { type: 'header', key: 'next-action' }
       ]
-    }
+    },
   ],
 }
 

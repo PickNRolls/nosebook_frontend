@@ -9,7 +9,7 @@ function formatDistance(token: FormatDistanceToken, count: number, options?: For
   }
 
   if (token === 'xMinutes') {
-    return original.slice(0, -2);
+    return `${count} мин`
   }
 
   if (token === 'xHours' || token === 'aboutXHours') {

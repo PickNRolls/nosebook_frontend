@@ -5,7 +5,7 @@ import { cookies } from "next/headers";
 
 import * as dto from '@/dto';
 
-import { SESSION_COOKIE_KEY } from "@/const/auth";
+import { SESSION_COOKIE_KEY } from "@/features/auth";
 import { serverRenderApi } from "@/serverRenderApi";
 
 import { Model } from './model';

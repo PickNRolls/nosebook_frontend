@@ -21,3 +21,9 @@
     text-wrap: balance;
   }
 }
+
+body,
+html {
+  height: 100%;
+  background: black;
+}
