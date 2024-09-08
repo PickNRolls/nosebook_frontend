@@ -34,3 +34,7 @@ html {
 .ltr {
   direction: ltr;
 }
+
+html {
+  overflow-y: scroll;
+}
