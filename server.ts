@@ -4,7 +4,14 @@ import next from "next";
 import { createProxy } from 'http-proxy';
 import cookie from 'cookie';
 
-import * as featauth from './src/features/auth';
+const SESSION_HEADER_KEY = 'X-Auth-Session-Id';
+
+function parseSessionCookie(cookie: string | undefined): [string, string] {
+  if (!cookie) {
+    return ['', ''];
+  }
+  return decodeURIComponent(cookie).split(':') as [string, string];
+}
 
 const port = parseInt(process.env.PORT || "3000", 10);
 const dev = process.env.NODE_ENV !== "production";
@@ -21,8 +28,8 @@ const proxy = createProxy({
 proxy.on('proxyReq', (proxyReq, req) => {
   const c = cookie.parse(req.headers.cookie?.toString() || '');
   if (c.nosebook_session) {
-    const [sessionId] = featauth.parseSessionCookie(c.nosebook_session);
-    proxyReq.setHeader(featauth.SESSION_HEADER_KEY, sessionId);
+    const [sessionId] = parseSessionCookie(c.nosebook_session);
+    proxyReq.setHeader(SESSION_HEADER_KEY, sessionId);
     proxyReq.removeHeader('cookie');
   }
 });
@@ -30,8 +37,8 @@ proxy.on('proxyReq', (proxyReq, req) => {
 proxy.on('proxyReqWs', (proxyReq, req) => {
   const c = cookie.parse(req.headers.cookie?.toString() || '');
   if (c.nosebook_session) {
-    const [sessionId] = featauth.parseSessionCookie(c.nosebook_session);
-    proxyReq.setHeader(featauth.SESSION_HEADER_KEY, sessionId);
+    const [sessionId] = parseSessionCookie(c.nosebook_session);
+    proxyReq.setHeader(SESSION_HEADER_KEY, sessionId);
     proxyReq.removeHeader('cookie');
   }
 });

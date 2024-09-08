@@ -38,7 +38,7 @@ export const Root = () => {
               }}
               onEnter={() => {
                 setEntering(true);
-                setAnimatingCount(prev => prev + 0.5);
+                setAnimatingCount(prev => prev + 1);
               }}
               onEntered={() => {
                 setEntering(false);
