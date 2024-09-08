@@ -7,7 +7,7 @@ import { Model, fullName, profilePageHref } from '../../model';
 
 export type LinkProps = {
   user: Model;
-  view?: 'dark';
+  view?: 'dark' | 'light';
   className?: string;
   dropHref?: boolean;
 };
@@ -18,6 +18,7 @@ export const Link: FC<LinkProps> = (props) => {
   const className = cn(
     "text-[12.5px] text-black font-medium leading-[18px]",
     view === 'dark' && 'hover:no-underline !text-black',
+    view === 'light' && '!text-sky-200',
     props.className,
   );
 

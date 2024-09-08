@@ -40,7 +40,6 @@ export const Chat: FC<ChatProps> = async (props) => {
 
     return featmessage.api.findByFilter({
       chatId: id,
-      limit: 20,
       next,
     }).then(res => res.data);
   };

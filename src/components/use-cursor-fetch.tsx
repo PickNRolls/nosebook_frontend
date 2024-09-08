@@ -23,10 +23,14 @@ export const useCursorFetch = <T = unknown>(props: UseCursorFetchProps<T>): UseC
 
   const [data, setData] = useState<T[]>([]);
   const [loading, setLoading] = useState(false);
+  const [observerNode, setObserverNode] = useState<HTMLDivElement | null>(null);
   const currentQuery = useRef(initial);
-  const observableRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
+    if (!observerNode) {
+      return;
+    }
+
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(async entry => {
         if (entry.intersectionRatio === 0) {
@@ -57,17 +61,17 @@ export const useCursorFetch = <T = unknown>(props: UseCursorFetchProps<T>): UseC
       threshold: 0.1
     });
 
-    observer.observe(observableRef.current!);
+    observer.observe(observerNode);
     return () => {
       observer.disconnect();
     };
-  }, [onFetch]);
+  }, [onFetch, observerNode]);
 
   return {
     observer: (
       <div
         className={cn("relative", direction === 'bottom' ? '-top-[500px]' : 'top-[200px]')}
-        ref={observableRef}
+        ref={(node) => setObserverNode(node)}
       />
     ),
     loading,

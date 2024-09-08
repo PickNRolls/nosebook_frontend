@@ -33,6 +33,8 @@ export const ChatClient: FC<ChatClientProps> = (props) => {
   const handleMessageSubmit = async (message: string) => {
     const ok = await onMessageSubmit(message);
     if (ok) {
+      // TODO: bug, router.refresh() is still in progress, we are already scrolled to bottom.
+      // Then new message is coming in, we are one message scroll behind.
       scrollRef.current?.scrollTo(0, scrollRef.current.scrollHeight);
     }
     return ok;

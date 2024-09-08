@@ -1,7 +1,7 @@
 import * as featcurrentuser from '@/features/current-user';
 
 import { Sidebar } from "./sidebar";
-import { Client } from './client';
+import { Client } from './client-root';
 
 export default function Layout({
   children,
