@@ -52,7 +52,7 @@ export const MainInfo = async (props: MainInfoProps) => {
           {currentUser.id !== user.id && (
             <>
               <Friendship user={user} />
-              <Link view="button-light" height="md" className="ml-auto flex items-center justify-center size-[32px]" href={featchat.chatPageHref({
+              <Link view="button-light" height="md" className="ml-auto flex items-center justify-center size-[32px] !px-0" href={featchat.chatPageHref({
                 interlocutorId: user.id,
               })}>
                 <svg width="20" height="20" viewBox="0 0 20 20">

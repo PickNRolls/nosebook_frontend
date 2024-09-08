@@ -22,7 +22,7 @@ export default async function Page({ searchParams }: {
 
   const chat = chats.data?.data.length ? chats.data.data[0] : null;
   if (!chat) {
-    return null;
+    return <featchat.components.Chat newChatWithInterlocutorId={interlocutorId} />;
   }
 
   return (

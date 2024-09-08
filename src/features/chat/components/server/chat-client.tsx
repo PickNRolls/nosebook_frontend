@@ -14,14 +14,14 @@ import { Spinner } from "@/components/spinner";
 import { ChatFooter } from "./chat-footer";
 
 export type ChatClientProps = {
-  chat: featchat.Model;
+  interlocutor: featuser.Model;
   onMessageSubmit: (message: string) => Promise<boolean>;
   onFetch: UseCursorFetchProps<featmessage.Model>['onFetch'];
   messages: dto.FindResult<featmessage.Model>;
 };
 
 export const ChatClient: FC<ChatClientProps> = (props) => {
-  const { chat, messages, onMessageSubmit, onFetch } = props;
+  const { interlocutor, messages, onMessageSubmit, onFetch } = props;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: fetchedMessages, observer, loading } = useCursorFetch({
@@ -31,6 +31,7 @@ export const ChatClient: FC<ChatClientProps> = (props) => {
   });
 
   const data = fetchedMessages;
+  const hasMessages = messages.data.length > 0;
 
   const handleMessageSubmit = async (message: string) => {
     const ok = await onMessageSubmit(message);
@@ -56,32 +57,47 @@ export const ChatClient: FC<ChatClientProps> = (props) => {
         </Link>
 
         <Link
-          href={featuser.profilePageHref(chat.interlocutor.id)}
+          href={featuser.profilePageHref(interlocutor.id)}
           view="no-style"
           className="mr-auto flex gap-2"
         >
           <featuser.components.Avatar
-            user={chat.interlocutor}
+            user={interlocutor}
             className="size-[32px]"
             outline={false}
           />
           <span>
-            <featuser.components.Link user={chat.interlocutor} view="dark" dropHref />
-            <featuser.components.OnlineText user={chat.interlocutor} />
+            <featuser.components.Link user={interlocutor} view="dark" dropHref />
+            <featuser.components.OnlineText user={interlocutor} />
           </span>
         </Link>
       </header>
-      <div className="flex flex-col-reverse gap-[2px] px-5 pb-10 pt-3 mt-auto overflow-auto" ref={scrollRef}>
-        {data.map(message => {
-          return (
-            <div key={message.id}>
-              <featmessage.components.Message message={message} />
-            </div>
-          )
-        })}
-        {observer}
-        {loading && <Spinner />}
-      </div>
+
+      {hasMessages && (
+        <div className="flex flex-col-reverse gap-[2px] px-5 pb-10 pt-3 mt-auto overflow-auto" ref={scrollRef}>
+          {data.map(message => {
+            return (
+              <div key={message.id}>
+                <featmessage.components.Message message={message} />
+              </div>
+            )
+          })}
+          {observer}
+          {loading && <Spinner />}
+        </div>
+      )}
+
+      {!hasMessages && (
+        <div className="mt-auto flex justify-center items-center h-full">
+          <div className="flex flex-col items-center">
+            <featuser.components.Avatar user={interlocutor} className="size-[80px] mb-2" outline={false} />
+            <span className="text-[20px] mb-1">{featuser.fullName(interlocutor)}</span>
+            <span className="text-slate-400 font-light text-[16px] mb-3">Напишите первым</span>
+            <Link view="button-light" height="md" href={featuser.profilePageHref(interlocutor.id)}>Перейти на страницу</Link>
+          </div>
+        </div>
+      )}
+
       <ChatFooter onChange={handleMessageSubmit} />
     </div>
   );
