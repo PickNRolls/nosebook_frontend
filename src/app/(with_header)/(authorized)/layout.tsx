@@ -3,12 +3,16 @@ import * as featcurrentuser from '@/features/current-user';
 import { Sidebar } from "./sidebar";
 import { Client } from './client-root';
 
-export default function Layout({
+export default async function Layout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
-  featcurrentuser.api.get();
+  const currentUser = await featcurrentuser.api.get();
+
+  if (!currentUser?.data) {
+    return null;
+  }
 
   return (
     <>
@@ -21,7 +25,7 @@ export default function Layout({
         </div>
       </div>
 
-      <Client />
+      <Client currentUser={currentUser.data} />
     </>
   );
 }

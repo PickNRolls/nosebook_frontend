@@ -1,12 +1,12 @@
-import { useEffect } from "react";
+import { FC, useEffect } from "react";
 
 import * as featws from '@/features/websocket/client';
 import * as featnotif from '@/features/notification/client';
 
 import { CommentLikedNotification, PostLikedNotification } from "./notifications";
 
+export const Root: FC = () => {
 
-export const Root = () => {
   useEffect(() => {
     const ws = featws.ws();
     const unsubscriptions: featws.UnsubscribeFn[] = [];

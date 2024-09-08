@@ -27,6 +27,7 @@ export const Notification: FC<NotificationProps> = (props) => {
 
     if (href) {
       router.push(href);
+      onClose?.();
     }
   };
 

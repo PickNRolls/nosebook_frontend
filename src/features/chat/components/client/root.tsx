@@ -1,10 +1,11 @@
-import { useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { FC, useEffect, useRef } from "react";
 
 import * as featws from '@/features/websocket/client';
 import * as featuser from '@/features/user/client';
 import * as featchat from '@/features/chat/client';
 import * as featnotif from '@/features/notification/client';
+import * as featcurrentuser from '@/features/current-user';
+import { usePathname, useRouter } from "next/navigation";
 
 class MessageNotification implements featnotif.Notification {
   public constructor(private event: featws.Event<'new_message'>) { }
@@ -32,16 +33,24 @@ class MessageNotification implements featnotif.Notification {
   }
 }
 
-export const Root = () => {
-  const router = useRouter();
+export type RootProps = {
+  currentUser: featcurrentuser.Model;
+}
+
+export const Root: FC<RootProps> = (props) => {
+  const { currentUser } = props;
+
+  const pathname = usePathname();
+  const pathnameRef = useRef(pathname);
+  pathnameRef.current = pathname;
 
   useEffect(() => {
     const ws = featws.ws();
 
     const unsubWs = ws.onMessage('new_message', (event) => {
-      featnotif.service().push(new MessageNotification(event));
-
-      router.refresh();
+      if (event.payload.author.id !== currentUser.id && !pathnameRef.current.startsWith('/chats')) {
+        featnotif.service().push(new MessageNotification(event));
+      }
     });
 
     return () => {
