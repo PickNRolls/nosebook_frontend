@@ -7,7 +7,7 @@ export type ButtonProps = {
   className?: string;
   width?: 'full' | 'auto';
   height?: 'full' | 'lg' | 'md';
-  view?: 'default' | 'primary' | 'action' | 'ghost' | 'list';
+  view?: 'default' | 'light' | 'primary' | 'action' | 'ghost' | 'list';
   rounded?: 'full' | 'lg';
   px?: 'sm' | 'md';
   onClick?: () => void;
@@ -30,7 +30,8 @@ export const Button: React.FC<ButtonProps> = (props) => {
     height === 'md' && 'h-8',
     height === 'full' && 'h-full',
     view === 'primary' && 'bg-sky-600 text-white hover:bg-sky-700 active:bg-sky-800',
-    view === 'default' && 'bg-slate-100 text-slate-400 hover:bg-slate-200 active:bg-slate-300',
+    (view === 'default' || view === 'light') && 'bg-slate-100 text-slate-400 hover:bg-slate-200 active:bg-slate-300',
+    view === 'light' && '!text-sky-600 !bg-sky-50 hover:!bg-sky-100 active:!bg-sky-200',
     view === 'action' && 'bg-green-500 text-white hover:bg-green-600 active:bg-green-700',
     view === 'ghost' && 'bg-transparent text-slate-400 font-normal hover:text-slate-600 active:text-slate-900',
     view === 'list' && 'hover:bg-slate-150 text-black font-normal',

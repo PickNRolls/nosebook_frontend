@@ -48,5 +48,12 @@ export const Chat: FC<ChatProps> = async (props) => {
     return null;
   }
 
-  return <ChatClient messages={messages.data} onMessageSubmit={handleMessageSubmit} onFetch={handleFetch} />
+  return (
+    <ChatClient
+      chat={chat.data}
+      messages={messages.data}
+      onMessageSubmit={handleMessageSubmit}
+      onFetch={handleFetch}
+    />
+  )
 };

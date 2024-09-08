@@ -11,7 +11,7 @@ import * as featuser from '@/features/user/client';
 import * as featchat from '@/features/chat/client';
 
 import locale from '@/components/date-fns/ru-short';
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 export type MessengerChatClientProps = {
   chat: featchat.Model;
@@ -33,17 +33,22 @@ export const MessengerChatClient: FC<MessengerChatClientProps> = (props) => {
   const { chat } = props;
 
   const params = useParams<{ id: string }>();
+  const searchParams = useSearchParams();
+
+  const isSelected = params.id === chat.id || searchParams.get('interlocutorId') === chat.interlocutor.id;
 
   return (
     <Link
-      className={cn("flex gap-3 px-2 py-[6px] rounded-lg hover:bg-slate-100", params.id === chat.id && "bg-slate-100")}
+      className={cn("flex gap-3 px-2 py-[6px] rounded-lg hover:bg-slate-100", isSelected && "bg-slate-100")}
       view="no-style"
-      href={featchat.chatPageHref(chat.id)}
+      href={featchat.chatPageHref({
+        chatId: chat.id
+      })}
     >
       <featuser.components.Avatar user={chat.interlocutor} className="size-[48px] shrink-0" outline={false} />
       <div className="pt-1 w-full min-w-0">
         <featuser.components.Link user={chat.interlocutor} dropHref view="dark" />
-        <div className="flex gap-[3px] items-baseline pt-[5px]">
+        <div className="flex gap-[3px] items-baseline pt-[7px]">
           <div className="text-slate-500 text-ellipsis overflow-hidden whitespace-nowrap">
             {chat.lastMessage.text}
           </div>

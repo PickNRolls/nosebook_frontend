@@ -36,7 +36,7 @@ export const RemoveButton: FC<RemoveButtonProps> = (props) => {
       onMouseEnter={() => setVisible(true)}
       onMouseLeave={() => setVisible(false)}
       innerRef={button => anchorRef.current = button!}
-      view="default"
+      view="light"
       width="auto"
       height="md"
       className="ml-auto !p-0 !w-[32px] flex justify-center items-center"

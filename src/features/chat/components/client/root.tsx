@@ -26,7 +26,9 @@ class MessageNotification implements featnotif.Notification {
   }
 
   href(): string {
-    return featchat.chatPageHref(this.event.payload.chatId)
+    return featchat.chatPageHref({
+      chatId: this.event.payload.chatId,
+    })
   }
 }
 

@@ -2,6 +2,7 @@
 
 import { FC, useRef } from "react";
 
+import * as featuser from '@/features/user/client';
 import * as featchat from '@/features/chat/client';
 import * as featmessage from '@/features/message/client';
 import * as dto from '@/dto';
@@ -13,13 +14,14 @@ import { Spinner } from "@/components/spinner";
 import { ChatFooter } from "./chat-footer";
 
 export type ChatClientProps = {
+  chat: featchat.Model;
   onMessageSubmit: (message: string) => Promise<boolean>;
   onFetch: UseCursorFetchProps<featmessage.Model>['onFetch'];
   messages: dto.FindResult<featmessage.Model>;
 };
 
 export const ChatClient: FC<ChatClientProps> = (props) => {
-  const { messages, onMessageSubmit, onFetch } = props;
+  const { chat, messages, onMessageSubmit, onFetch } = props;
   const scrollRef = useRef<HTMLDivElement>(null);
 
   const { data: fetchedMessages, observer, loading } = useCursorFetch({
@@ -45,12 +47,28 @@ export const ChatClient: FC<ChatClientProps> = (props) => {
       <header className="flex min-h-0 shrink-0 h-[56px] border-b border-slate-200 items-center px-2">
         <Link
           view="button-link"
-          className="text-slate-400 !size-[32px] !p-0 mr-auto hover:bg-slate-100 hover:!text-slate-400 flex justify-center items-center"
+          className="text-slate-400 !size-[32px] !p-0 mr-2 hover:bg-slate-100 hover:!text-slate-400 flex justify-center items-center"
           href={featchat.listPageHref()}
         >
           <svg aria-hidden="true" display="block" viewBox="0 0 24 24" width="24" height="24" fill="currentColor">
             <path d="M7.536 6.264a.9.9 0 0 0-1.272 1.272L10.727 12l-4.463 4.464a.9.9 0 0 0 1.272 1.272L12 13.273l4.464 4.463a.9.9 0 1 0 1.272-1.272L13.273 12l4.463-4.464a.9.9 0 1 0-1.272-1.272L12 10.727z"></path>
           </svg>
+        </Link>
+
+        <Link
+          href={featuser.profilePageHref(chat.interlocutor.id)}
+          view="no-style"
+          className="mr-auto flex gap-2"
+        >
+          <featuser.components.Avatar
+            user={chat.interlocutor}
+            className="size-[32px]"
+            outline={false}
+          />
+          <span>
+            <featuser.components.Link user={chat.interlocutor} view="dark" dropHref />
+            <featuser.components.OnlineText user={chat.interlocutor} />
+          </span>
         </Link>
       </header>
       <div className="flex flex-col-reverse gap-[2px] px-5 pb-10 pt-3 mt-auto overflow-auto" ref={scrollRef}>

@@ -26,7 +26,7 @@ export const Friendship: React.FC<FriendshipProps> = async (props) => {
   const isResponder = Boolean(relationRes.data?.pendingResponderIds?.find(id => id === user.id));
   const isNobody = !isFriend && !isRequester && !isResponder;
 
-  return <div>
+  return <div className="shrink-0">
     {
       currentUser.id !== user.id && (
         <FriendshipClient

@@ -4,7 +4,6 @@ import { AddButton } from './add-button';
 import { RemoveButton } from './remove-button';
 import { CancelButton } from './cancel-button';
 import { ResponderButtons } from './responder-buttons';
-import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 
 export type FriendshipClientProps = {

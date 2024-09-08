@@ -16,7 +16,7 @@ export const Link: FC<LinkProps> = (props) => {
   const { user, view } = props;
 
   const className = cn(
-    "text-[12.5px] text-black font-medium leading-[18px]",
+    "text-[13px] text-black font-medium leading-[15px]",
     view === 'dark' && 'hover:no-underline !text-black',
     view === 'light' && '!text-sky-200',
     props.className,

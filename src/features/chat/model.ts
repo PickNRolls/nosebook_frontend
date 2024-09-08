@@ -12,7 +12,14 @@ export function listPageHref() {
   return `/chats`;
 }
 
-export function chatPageHref(id: string) {
-  return `/chats/${id}`;
+export function chatPageHref(opts: {
+  chatId?: string;
+  interlocutorId?: string;
+}) {
+  if (opts.chatId) {
+    return `/chats/${opts.chatId}`;
+  }
+
+  return `/chats?interlocutorId=${opts.interlocutorId}`
 }
 

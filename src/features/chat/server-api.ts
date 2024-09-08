@@ -7,6 +7,7 @@ import { actionApi } from "@/actionApi";
 
 export const findByFilter = (filter?: {
   next?: string;
+  interlocutorId?: string;
   limit?: number;
 }): Promise<dto.ApiResponse<dto.FindResult<Model>>> => {
   const query = new URLSearchParams();
@@ -15,6 +16,9 @@ export const findByFilter = (filter?: {
   }
   if (filter?.next != null) {
     query.set('next', filter.next);
+  }
+  if (filter?.interlocutorId != null) {
+    query.set('interlocutorId', filter.interlocutorId);
   }
 
   return serverRenderApi<dto.FindResult<Model>>(`/chats?${query.toString()}`)
