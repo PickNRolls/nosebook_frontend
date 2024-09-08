@@ -3,7 +3,7 @@ import { HOST } from "@/const";
 import { Event, EventType } from "./event";
 
 let instance: WS | null = null;
-type UnsubscribeFn = () => void;
+export type UnsubscribeFn = () => void;
 type MessageListener<T extends EventType> = (event: Event<T>) => void;
 
 class WS {
