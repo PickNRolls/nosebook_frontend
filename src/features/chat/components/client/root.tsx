@@ -34,7 +34,7 @@ export const Root = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const ws = featws.create();
+    const ws = featws.ws();
 
     const unsubWs = ws.onMessage('new_message', (event) => {
       featnotif.service().push(new MessageNotification(event));

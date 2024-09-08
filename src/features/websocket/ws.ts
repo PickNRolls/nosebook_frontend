@@ -2,12 +2,12 @@ import { HOST } from "@/const";
 
 import { Event, EventType } from "./event";
 
-let ws: WS;
+let instance: WS | null = null;
 type UnsubscribeFn = () => void;
 type MessageListener<T extends EventType> = (event: Event<T>) => void;
 
 class WS {
-  private original: WebSocket;
+  private original: WebSocket | null = null;
   public constructor() {
     this.original = new WebSocket(`http://${HOST}/connect/ws`);
   }
@@ -24,19 +24,26 @@ class WS {
       }
     }
 
-    this.original.addEventListener('message', handle);
+    this.original?.addEventListener('message', handle);
     return () => {
-      this.original.removeEventListener('message', handle);
+      this.original?.removeEventListener('message', handle);
     };
+  }
+
+  public close() {
+    const NORMAL_CLOSE = 1000;
+    this.original?.close(NORMAL_CLOSE);
+    this.original = null;
+    instance = null;
   }
 }
 
-export function create() {
-  if (ws) {
-    return ws;
+export function ws(): WS {
+  if (instance) {
+    return instance;
   }
 
-  ws = new WS();
-  return ws;
+  instance = new WS();
+  return instance;
 }
 
