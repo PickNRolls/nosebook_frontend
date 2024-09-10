@@ -1,0 +1,4 @@
+#!/bin/bash
+
+docker build -t "nosebook-frontend:$(git rev-parse HEAD)" -t nosebook-frontend:latest .
+
