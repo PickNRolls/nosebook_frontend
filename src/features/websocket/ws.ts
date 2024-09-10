@@ -1,5 +1,3 @@
-import { HOST } from "@/const";
-
 import { Event, EventType } from "./event";
 
 let instance: WS | null = null;
@@ -9,7 +7,7 @@ type MessageListener<T extends EventType> = (event: Event<T>) => void;
 class WS {
   private original: WebSocket | null = null;
   public constructor() {
-    this.original = new WebSocket(`http://${HOST}/connect/ws`);
+    this.original = new WebSocket('/connect/ws');
   }
 
   public unwrap() {
