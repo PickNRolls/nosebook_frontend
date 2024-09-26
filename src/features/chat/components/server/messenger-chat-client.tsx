@@ -12,6 +12,7 @@ import * as featchat from '@/features/chat/client';
 
 import locale from '@/components/date-fns/ru-short';
 import { useParams, useSearchParams } from "next/navigation";
+import { NoSsr } from "@/components/no-ssr";
 
 export type MessengerChatClientProps = {
   chat: featchat.Model;
@@ -53,7 +54,7 @@ export const MessengerChatClient: FC<MessengerChatClientProps> = (props) => {
             {chat.lastMessage.text}
           </div>
           <span className="text-slate-400">·</span>
-          <span className="text-slate-400 shrink-0">{format(chat.lastMessage.createdAt)}</span>
+          <NoSsr><span className="text-slate-400 shrink-0">{format(chat.lastMessage.createdAt)}</span></NoSsr>
         </div>
       </div>
     </Link>

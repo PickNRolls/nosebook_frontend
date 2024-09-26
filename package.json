@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "docker compose -f compose.yaml -f compose-dev.yaml up --build",
+    "dev": "docker compose -f compose.yaml up",
     "docker-dev": "PORT=8000 nodemon",
     "build": "next build && tsc --project tsconfig.server.json",
     "start": "NODE_ENV=production PORT=8000 node dist/server.js",
