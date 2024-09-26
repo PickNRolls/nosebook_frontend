@@ -110,8 +110,9 @@ export const HeaderFinder: FC<HeaderFinderProps> = (props) => {
                 key={user.id}
               >
                 <featuser.components.Avatar user={user} className="size-[40px]" outline={false} />
-                <div className="flex flex-col justify-start h-[30px]">
+                <div className="flex flex-col justify-start gap-[2px]">
                   <featuser.components.Link user={user} view="dark" className="font-normal" dropHref />
+                  <span className="text-slate-400 text-[12px]">@{user.nick}</span>
                 </div>
               </Link>
             );
