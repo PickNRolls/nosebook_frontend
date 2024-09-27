@@ -11,11 +11,12 @@ import { Textarea } from "@/components/textarea";
 
 export type FormProps = {
   me: featcurrentuser.Model;
+  placeholder?: string;
   onSubmit: (value: string) => Promise<boolean>;
 };
 
 export const Form: React.FC<FormProps> = (props) => {
-  const { me, onSubmit } = props;
+  const { me, placeholder = 'Что у вас нового?', onSubmit } = props;
 
   const [value, setValue] = useState('');
   const [focused, setFocused] = useState(false);
@@ -31,12 +32,12 @@ export const Form: React.FC<FormProps> = (props) => {
   return (
     <PageBlock className="flex flex-col">
       <div className="flex pl-3">
-        <featuser.components.Avatar className="-ml-[2px]" size="xs" user={me} />
+        <featuser.components.Avatar className="-ml-[2px] size-7 shrink-0 mt-[4px]" outline={false} user={me} />
         <Textarea
           value={value}
           onChange={setValue}
           onSubmit={submit}
-          placeholder="Что у вас нового?"
+          placeholder={placeholder}
           onFocusChange={setFocused}
           className="-mt-2 -mb-2 -mr-2 pl-[7px] pr-10 pt-4 focus:pt-4 focus:pb-4 focus:min-h-20"
         />

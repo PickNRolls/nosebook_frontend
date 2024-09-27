@@ -16,7 +16,9 @@ export type AvatarProps = {
 }
 
 export const Avatar = (props: AvatarProps) => {
-  const { size = 'xxl', outline = true, canShowOnlineMarker = false, showOnlyOnlineMarker = false } = props;
+  const { size = 'xxl', user, outline = true, canShowOnlineMarker = false, showOnlyOnlineMarker = false } = props;
+
+  const src = !!user.avatarUrl ? user.avatarUrl : AvatarImage;
 
   return (
     <div className={cn(
@@ -30,7 +32,7 @@ export const Avatar = (props: AvatarProps) => {
       outline && 'border-white border-[4px]'
     )}>
       <div className="relative">
-        <Image src={AvatarImage} alt="avatar" className="rounded-full" />
+        <Image src={src} width={150} height={150} alt="avatar" className="rounded-full" />
         {canShowOnlineMarker && (
           <OnlineMarker
             user={props.user}

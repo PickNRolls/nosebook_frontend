@@ -4,6 +4,7 @@ export type Model = {
   lastName: string;
   nick: string;
   createdAt: string;
+  avatarUrl?: string;
 
   lastOnlineAt: string;
   online: boolean;
