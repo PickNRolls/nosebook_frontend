@@ -45,4 +45,8 @@ services:
     
 secrets:
   db-password:
-    file: db-password.txt
+    file: ../back/db-password.txt
+  aws-access-key-id:
+    file: ../back/aws-access-key-id.txt
+  aws-secret-access-key:
+    file: ../back/aws-secret-access-key.txt
