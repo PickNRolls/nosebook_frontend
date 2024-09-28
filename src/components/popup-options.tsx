@@ -5,6 +5,7 @@ import React, { FC, ReactNode, useRef, useState } from 'react';
 import { Button, ButtonProps } from '@/components/button';
 import { Popup } from '@/components/popup';
 import { Link, LinkProps } from '@/components/link';
+import { Placement } from '@popperjs/core';
 
 
 export type PopupButtonOption = {
@@ -20,13 +21,14 @@ export type PopupOption = {
 } & (PopupButtonOption | PopupLinkOption);
 
 export type PopupOptionsProps = {
-  children: ReactNode;
+  children?: ReactNode;
   visible?: boolean;
+  placement?: Placement;
   options: PopupOption[];
 } & ButtonProps;
 
 export const PopupOptions: FC<PopupOptionsProps> = (props) => {
-  const { children, options, ...buttonProps } = props;
+  const { children, options, placement, ...buttonProps } = props;
 
   const [visible, setVisible] = useState(false);
   const ref = useRef<HTMLButtonElement>();
@@ -42,7 +44,7 @@ export const PopupOptions: FC<PopupOptionsProps> = (props) => {
     >
       {children}
 
-      <Popup anchor={ref.current!} visible={visible || props.visible}>
+      <Popup anchor={ref.current!} visible={visible || props.visible} placement={placement}>
         <div className="flex flex-col gap-[2px]">
           {options.map(option => {
             if (option.type === 'button') {

@@ -9,10 +9,10 @@ export type ButtonProps = {
   height?: 'full' | 'lg' | 'md';
   view?: 'default' | 'light' | 'primary' | 'action' | 'ghost' | 'list';
   rounded?: 'full' | 'lg';
-  px?: 'sm' | 'md';
+  px?: 'sm' | 'md' | null;
   onClick?: () => void;
   as?: 'span';
-  children: React.ReactNode;
+  children?: React.ReactNode;
   innerRef?: (instance: HTMLButtonElement) => void;
 } & Pick<HTMLAttributes<HTMLButtonElement>, 'onMouseEnter' | 'onMouseLeave'>;
 
@@ -21,7 +21,7 @@ export const Button: React.FC<ButtonProps> = (props) => {
   const view = props.view ?? 'primary';
   const width = props.width ?? 'full';
   const rounded = props.rounded ?? 'lg';
-  const px = props.px ?? 'md';
+  const px = props.px === undefined ? 'md' : props.px;
   const className = cn(
     'font-medium text-sm transition duration-150 flex items-center text-center justify-center',
     width === 'full' && 'w-full',

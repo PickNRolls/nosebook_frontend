@@ -6,7 +6,7 @@ export default function Layout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="pt-12 h-full">
+    <div className="pt-12">
       <Header />
       {children}
     </div>

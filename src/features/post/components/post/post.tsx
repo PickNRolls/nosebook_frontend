@@ -102,7 +102,7 @@ export const Post = (props: PostProps) => {
         onlineMarkerClassName="!size-[12px] !border-[2px]"
         user={post.author}
         outline={false}
-        canShowOnlineMarker
+        canShowLastOnlineMarker
         showOnlyOnlineMarker
       />
       <div className="flex flex-col">

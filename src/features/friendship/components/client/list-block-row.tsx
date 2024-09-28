@@ -30,7 +30,7 @@ export const ListBlockRow: FC<ListBlockRowProps> = (props) => {
           user={request.user}
           className="size-[80px] border-none"
           onlineMarkerClassName="!size-[16px] right-1 bottom-1"
-          canShowOnlineMarker
+          canShowLastOnlineMarker
           showOnlyOnlineMarker
         />
       </Link>

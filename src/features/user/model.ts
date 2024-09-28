@@ -4,7 +4,10 @@ export type Model = {
   lastName: string;
   nick: string;
   createdAt: string;
-  avatarUrl?: string;
+  avatar?: {
+    url: string;
+    updatedAt: string;
+  };
 
   lastOnlineAt: string;
   online: boolean;

@@ -13,7 +13,6 @@ export async function middleware(request: NextRequest) {
 
   if (session && request.nextUrl.pathname.startsWith('/login')) {
     const [_, userId] = featauth.parseSessionCookie(session);
-    console.log(featuser.profilePageHref(userId));
     return NextResponse.redirect(new URL(featuser.profilePageHref(userId), request.url))
   }
 }

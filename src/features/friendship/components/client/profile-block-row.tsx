@@ -34,7 +34,7 @@ export const ProfileBlockRow: FC<ProfileBlockRowProps> = async (props) => {
                 user={request.user}
                 className="size-[64px] border-none mb-[5px]"
                 onlineMarkerClassName="!size-[16px]"
-                canShowOnlineMarker={canShowOnlineMarker}
+                canShowLastOnlineMarker={canShowOnlineMarker}
                 showOnlyOnlineMarker
               />
               <span className="text-[13px] text-black font-normal pb-[8px]">{request.user.firstName}</span>

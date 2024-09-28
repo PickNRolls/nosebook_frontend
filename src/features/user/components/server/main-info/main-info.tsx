@@ -7,6 +7,7 @@ import * as featchat from '@/features/chat/server';
 import { Link } from '@/components/link';
 
 import { Friendship } from './friendship';
+import { Avatar } from './avatar';
 
 export type MainInfoProps = {
   className?: string;
@@ -29,13 +30,13 @@ export const MainInfo = async (props: MainInfoProps) => {
 
   return <div className={cn("h-80 rounded-lg bg-slate-100 relative border-slate-200 border", props.className)}>
     <div className="h-24 bg-white rounded-lg absolute bottom-0 w-full flex p-5">
-      <featuser.components.Avatar
-        className="absolute left-2 -top-16 size-[150px]"
-        onlineMarkerClassName="right-[11.5px] bottom-[12px]"
-        outline
-        user={user}
-        canShowOnlineMarker
-      />
+      <div className="absolute left-2 -top-16">
+        <Avatar currentUser={currentUser} user={user} onUpdate={async (formData) => {
+          'use server';
+
+          await featuser.api.changeAvatar(formData);
+        }} />
+      </div>
 
       <div className="basis-full ml-40 flex">
         <div className="h-full flex items-start flex-col">
