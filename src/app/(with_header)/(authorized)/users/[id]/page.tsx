@@ -7,7 +7,6 @@ import * as dto from '@/dto';
 
 import { serverRenderApi } from "@/serverRenderApi";
 import { actionApi } from "@/actionApi";
-
 import { Wall } from "./wall";
 
 export default async function Page({ params }: {
@@ -27,9 +26,9 @@ export default async function Page({ params }: {
     return null;
   }
 
-
   return (
     <div>
+      {user.data != null && <title>{featuser.fullName(user.data)}</title>}
       <featuser.components.MainInfo user={user?.data} className="mb-4" />
       <div className="flex gap-4">
         <div className="flex flex-col gap-4 basis-2/3">

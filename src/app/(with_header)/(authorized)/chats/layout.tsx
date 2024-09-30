@@ -12,4 +12,7 @@ export default function Layout({
   );
 }
 
+export const metadata = {
+  title: 'Мессенджер',
+}
 

@@ -17,3 +17,8 @@ export default async function Page({ searchParams }: {
     </div>
   );
 }
+
+export const metadata = {
+  title: 'Друзья',
+}
+
