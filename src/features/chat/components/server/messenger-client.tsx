@@ -30,7 +30,7 @@ export const MessengerClient: FC<MessengerClientProps> = (props) => {
   }, []);
 
   return (
-    <PageBlock className="flex !p-0 h-full">
+    <PageBlock className="flex !p-0 h-[calc(100vh-80px)]">
       <div className="basis-1/3 shrink-0 grow-0 border-r border-slate-200 h-full min-w-0 px-2 pt-2 flex flex-col gap-[4px]">
         {chats.map(chat => {
           return (

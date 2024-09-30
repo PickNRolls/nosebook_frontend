@@ -106,7 +106,7 @@ export const HeaderFinder: FC<HeaderFinderProps> = (props) => {
                   setValue('');
                   value$.next('');
                 }}
-                className="flex gap-2 items-center px-3 h-[60px] cursor-pointer hover:bg-slate-100 rounded-lg w-full"
+                className="flex gap-2 items-center px-3 h-[60px] cursor-pointer hover:bg-slate-50 rounded-lg w-full"
                 key={user.id}
               >
                 <featuser.components.Avatar user={user} className="size-[40px]" outline={false} />

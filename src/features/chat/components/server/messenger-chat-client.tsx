@@ -40,7 +40,7 @@ export const MessengerChatClient: FC<MessengerChatClientProps> = (props) => {
 
   return (
     <Link
-      className={cn("flex gap-3 px-2 py-[6px] rounded-lg hover:bg-slate-100", isSelected && "bg-slate-100")}
+      className={cn("flex gap-3 px-2 py-[6px] rounded-lg hover:bg-slate-50", isSelected && "bg-slate-50")}
       view="no-style"
       href={featchat.chatPageHref({
         chatId: chat.id
