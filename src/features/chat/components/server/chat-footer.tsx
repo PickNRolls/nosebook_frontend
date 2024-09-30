@@ -18,8 +18,13 @@ export const ChatFooter: FC<ChatFooterProps> = (props) => {
         className="h-[42px] py-3 shadow-[0_0_2px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.08)] rounded-lg px-5 max-h-[312px]"
         innerRef={node => (ref.current = node)}
         value={value}
+        ctrlEnter="newline"
         onChange={setValue}
         onSubmit={async () => {
+          if (!value) {
+            return;
+          }
+
           const ok = await props.onChange(value);
           if (!ok) {
             return;

@@ -22,6 +22,10 @@ export const Form: React.FC<FormProps> = (props) => {
   const [focused, setFocused] = useState(false);
 
   const submit = async () => {
+    if (!value) {
+      return;
+    }
+
     const ok = await onSubmit(value);
     if (ok) {
       setValue('');

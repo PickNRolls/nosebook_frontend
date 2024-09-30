@@ -32,13 +32,18 @@ export const MessengerClient: FC<MessengerClientProps> = (props) => {
   return (
     <PageBlock className="flex !p-0 h-[calc(100vh-80px)]">
       <div className="basis-1/3 shrink-0 grow-0 border-r border-slate-200 h-full min-w-0 px-2 pt-2 flex flex-col gap-[4px]">
-        {chats.map(chat => {
+        {chats.length > 0 && chats.map(chat => {
           return (
             <MessengerChatClient key={chat.id} chat={chat} />
           );
         })}
-      </div>
 
+        {chats.length == 0 && (
+          <div className="text-lg text-slate-400 font-medium flex items-center justify-center w-full h-full">
+            У вас пока нет чатов
+          </div>
+        )}
+      </div>
       <div className="basis-2/3 shrink-0 grow-0">
         {children}
       </div>

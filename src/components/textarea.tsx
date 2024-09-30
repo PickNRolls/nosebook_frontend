@@ -3,6 +3,7 @@ import { ChangeEvent, useEffect, useRef } from 'react';
 
 export type TextareaProps = {
   value: string;
+  ctrlEnter?: 'submit' | 'newline';
   onChange: (value: string) => void;
   placeholder?: string;
   onSubmit?: () => void;
@@ -12,7 +13,7 @@ export type TextareaProps = {
 };
 
 export const Textarea: React.FC<TextareaProps> = (props) => {
-  const { value, placeholder, onChange, onSubmit, onFocusChange } = props;
+  const { value, ctrlEnter = 'submit', placeholder, onChange, onSubmit, onFocusChange } = props;
 
   const ref = useRef<HTMLTextAreaElement>();
 
@@ -34,9 +35,13 @@ export const Textarea: React.FC<TextareaProps> = (props) => {
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (event.ctrlKey && event.key === 'Enter') {
-      onSubmit?.();
-      ref.current?.blur();
+    if (event.key === 'Enter') {
+      if ((event.ctrlKey && ctrlEnter === 'submit') || (!event.ctrlKey && ctrlEnter !== 'submit')) {
+        onSubmit?.();
+        event.preventDefault();
+      } else if (event.ctrlKey) {
+        onChange(value + '\n');
+      }
     }
   };
 
