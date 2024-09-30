@@ -18,5 +18,5 @@ export const get = cache((): Promise<dto.ApiResponse<Model> | null> => {
 
   return serverRenderApi<Model>('/whoami', {
     method: 'GET'
-  })
+  });
 })
